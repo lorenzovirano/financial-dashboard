@@ -1,0 +1,7 @@
+{
+  "name": "finance-dashboard",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
