@@ -1,25 +1,30 @@
 import './Dashboard.css';
-import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, IonToolbar} from '@ionic/react';
+import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent} from '@ionic/react';
 import Layout from '../components/Layout';
 
 const Dashboard: React.FC = () => {
     return (
-        <>
+        <IonPage>
             <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Dashboard</IonTitle>
-                </IonToolbar>
+                    <IonToolbar>
+                        <IonButtons slot='start'>
+                            <IonMenuButton></IonMenuButton>
+                        </IonButtons>
+                        <IonTitle>Dashboard</IonTitle>
+                    </IonToolbar>
             </IonHeader>
-            <Layout>
-                <IonGrid>
-                    <IonRow>
-                        <IonCol size='6'>
-                            <h1>Ciao</h1>
-                        </IonCol>
-                    </IonRow>
-                </IonGrid>
-            </Layout>
-        </>
+            <IonContent>
+                <Layout>
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol size='6'>
+                                <h1>Ciao</h1>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </Layout>
+            </IonContent>
+        </IonPage>
     );
 }
 
