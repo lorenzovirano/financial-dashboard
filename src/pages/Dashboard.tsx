@@ -1,6 +1,6 @@
 import './Dashboard.css';
 import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent} from '@ionic/react';
-import Layout from '../components/Layout';
+import Layout from '../components/layout/Layout';
 
 const Dashboard: React.FC = () => {
     return (

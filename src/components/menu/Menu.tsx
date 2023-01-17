@@ -1,7 +1,7 @@
 import { IonSplitPane, IonMenu, IonRouterOutlet, IonHeader, IonToolbar, IonTitle, IonContent, IonMenuToggle, IonItem, IonPage, IonIcon, IonButton } from '@ionic/react'
 import { homeOutline, logOutOutline} from 'ionicons/icons'
 import { Route, Redirect } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard'
+import Dashboard from '../../pages/Dashboard'
 import './Menu.css'
 
 const Menu: React.FC = () => {
