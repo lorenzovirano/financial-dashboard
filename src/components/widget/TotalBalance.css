@@ -1,0 +1,19 @@
+.total-balance{
+    width: 100%;
+    border: 1px solid rgb(125, 125, 125);
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 150px;
+}
+
+.total-balance span{
+    width: 100%;
+    display: block;
+    font-size: 28px;
+    margin-top: 28px;
+}
+
+.total-balance .widget-title{
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}

@@ -1,12 +1,13 @@
 import { IonSplitPane, IonMenu, IonRouterOutlet, IonHeader, IonToolbar, IonTitle, IonContent, IonMenuToggle, IonItem, IonPage, IonIcon, IonButton } from '@ionic/react'
-import { homeOutline, logOutOutline} from 'ionicons/icons'
+import { homeOutline, logOutOutline, downloadOutline } from 'ionicons/icons'
 import { Route, Redirect } from 'react-router-dom';
 import Dashboard from '../../pages/Dashboard'
 import './Menu.css'
 
 const Menu: React.FC = () => {
     const paths = [
-        {name: 'Dashboard', url: '/app/dashboard', icon: homeOutline}
+        {name: 'Dashboard', url: '/app/dashboard', icon: homeOutline},
+        {name: 'Import Data', url: '/app/import', icon: downloadOutline}
     ]
 
     return(
@@ -35,6 +36,7 @@ const Menu: React.FC = () => {
                 </IonMenu>
                 <IonRouterOutlet id='main'>
                     <Route exact path="/app/dashboard" component={Dashboard}/>
+                    <Route exact path="/app/import" component={Dashboard}/>
                     <Route exact path="/app" component={Dashboard}>
                         <Redirect to="/app/dashboard" />
                     </Route>
