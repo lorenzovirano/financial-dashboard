@@ -1,10 +1,15 @@
 import './TotalBalance.css';
 
-const TotalBalance: React.FC = () => {
+type TotalBalanceProps = {
+    total: number,
+    currency: string;
+}
+
+const TotalBalance = ({total, currency}: TotalBalanceProps) => {
     return(
         <div className="total-balance">
             <h3 className="widget-title">Total Balance</h3>
-            <span>$6055,00</span>
+            <span>{currency}{total}</span>
         </div>
     );
 }
