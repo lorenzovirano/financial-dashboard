@@ -1,5 +1,6 @@
 import './Dashboard.css';
-import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent} from '@ionic/react';
+import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton} from '@ionic/react';
+import { add } from 'ionicons/icons'
 import Layout from '../../components/layout/Layout';
 import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
 import Slider from '../../components/widget/slider/Slider';
@@ -29,6 +30,17 @@ const Dashboard: React.FC = () => {
                         </IonRow>
                     </IonGrid>
                 </Layout>
+                <IonFab slot="fixed" horizontal="end" vertical="bottom">
+                    <IonFabButton>
+                        <IonIcon icon={add} />
+                    </IonFabButton>
+                    <IonFabList side='top'>
+                        <IonButton>Entrata</IonButton>
+                    </IonFabList>
+                    <IonFabList side='start'>
+                        <IonButton>Uscita</IonButton>
+                    </IonFabList>
+                </IonFab>
             </IonContent>
         </IonPage>
     );

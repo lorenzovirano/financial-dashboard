@@ -1,0 +1,7 @@
+ion-fab{
+    margin: 25px;
+}
+
+ion-fab-list ion-button{
+    width: 60px;
+}
