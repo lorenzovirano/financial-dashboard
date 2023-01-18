@@ -1,0 +1,14 @@
+.slider{
+    width: 100%;
+    height: 30px;
+    border: 2px solid rgb(125, 125, 125);
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.slider__inner{
+    background: linear-gradient(to right, #132800, #679929);
+    height: 100%;
+    -webkit-box-shadow: inset 0px 0px 15px -2px #8d8d8d; 
+    box-shadow: inset 0px 0px 15px -2px #8d8d8d;
+}
