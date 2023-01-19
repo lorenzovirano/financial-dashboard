@@ -4,6 +4,7 @@ import { add } from 'ionicons/icons'
 import Layout from '../../components/layout/Layout';
 import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
 import Slider from '../../components/widget/slider/Slider';
+import CreditCards from '../../components/widget/creditCards/CreditCards';
 
 const Dashboard: React.FC = () => {
     return (
@@ -21,6 +22,7 @@ const Dashboard: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
+                                <CreditCards />
                                 <TotalBalance currency='$' total={6500.00}/>
                             </IonCol>
                             <IonCol>
