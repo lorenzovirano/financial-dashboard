@@ -28,7 +28,6 @@ const Menu: React.FC = () => {
                         </IonToolbar>
                     </IonHeader>
                     <IonContent>
-                        <div className='menu-up'>
                         {paths.map((item, index) => (
                             <IonMenuToggle key={index}>
                                 <IonItem routerLink={item.url} routerDirection='none'>
@@ -37,13 +36,10 @@ const Menu: React.FC = () => {
                                 </IonItem>
                             </IonMenuToggle>
                         ))}
-                        </div>
-                        <div className='menu-down'>
                         <IonButton routerLink='/' routerDirection='forward' expand='full' slot='end'>
                             <IonIcon icon={logOutOutline} slot='start'></IonIcon>
                             Logout
                         </IonButton>
-                        </div>
                     </IonContent>
                 </IonMenu>
                 <IonRouterOutlet id='main'>
