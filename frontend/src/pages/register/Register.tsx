@@ -12,15 +12,22 @@ const Register: React.FC = () => {
         /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
       );
     };
+
+    const validatePassword = (pwd: string) => {
+        return pwd.match(
+            /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
+        );
+    };
   
     const validate = (ev: Event) => {
-      const value = (ev.target as HTMLInputElement).value;
-  
+      const valueEmail = (ev.target as HTMLInputElement).value;
+
       setIsValid(undefined);
   
-      if (value === '') return;
+      if (valueEmail === '') return;
   
-      validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
+      validateEmail(valueEmail) !== null ? setIsValid(true) : setIsValid(false);
+
     };
   
     const markTouched = () => {
