@@ -13,11 +13,11 @@ const Register: React.FC = () => {
       );
     };
 
-    const validatePassword = (pwd: string) => {
+    /* const validatePassword = (pwd: string) => {
         return pwd.match(
             /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
         );
-    };
+    };*/
   
     const validate = (ev: Event) => {
       const valueEmail = (ev.target as HTMLInputElement).value;
