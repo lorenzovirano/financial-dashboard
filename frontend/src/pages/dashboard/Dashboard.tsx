@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
                         <IonTitle>Financial Dashboard</IonTitle>
                     </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent scrollY={true}>
                 <Layout>
                     <IonGrid>
                         <IonRow>
@@ -25,13 +25,16 @@ const Dashboard: React.FC = () => {
                                 <CreditCards />
                                 <TotalBalance currency='$' total={6500.00}/>
                             </IonCol>
-                            <IonCol>
-                                <Slider size={'80%'} title={"Entrate"}/>
-                                <Slider size={'24%'} title={"Uscite"}/>
-                            </IonCol>
                         </IonRow>
                     </IonGrid>
                 </Layout>
+                <section className='movement-section'>
+                    <Layout>
+                        <IonGrid>
+                            <IonCol></IonCol>
+                        </IonGrid>
+                    </Layout>
+                </section>
                 <IonFab slot="fixed" horizontal="end" vertical="bottom">
                     <IonFabButton>
                         <IonIcon icon={add} />
