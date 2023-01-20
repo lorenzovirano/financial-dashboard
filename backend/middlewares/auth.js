@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const User = require("../models/user.model");
 
 function authenticateToken(req, res, next){
     const authHeader = req.headers.authorization;
@@ -14,8 +15,11 @@ function authenticateToken(req, res, next){
     });
 }
 
-function generateAccessToken(username){
-    return jwt.sign({data: username}, "ProvaKey", {
+
+
+function generateAccessToken(id){
+    console.log(id)
+    return jwt.sign({data: id}, "ProvaKey", {
         expiresIn: "1h"
     });
 }
