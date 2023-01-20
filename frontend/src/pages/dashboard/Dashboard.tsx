@@ -6,6 +6,8 @@ import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
 import Table from '../../components/widget/table/Table';
 import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
+import DoughnutChart from '../../components/charts/doughnutChart/DoughnutChart';
+
 
 const Dashboard: React.FC = () => {
     return (
@@ -52,6 +54,9 @@ const Dashboard: React.FC = () => {
                                         <TableItem title='Pagamento pos' value={36.25} recipient="McDonald's" outflow={true} currency='$'/>
                                         <IonButton expand='block' slot='end'>Visualizza tutti i movimenti</IonButton>
                                     </Table>
+                                </IonCol>
+                                <IonCol>
+                                    <DoughnutChart title='Uscite'/>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>

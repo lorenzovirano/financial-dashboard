@@ -1,0 +1,11 @@
+.exit-chart{
+    background: #F4EDEA;
+    padding: 25px;
+    border-radius: 30px;
+}
+
+.chart-title{
+    font-size: 18px;
+    color: #11263A;
+    font-weight: 800;
+}
