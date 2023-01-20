@@ -56,7 +56,7 @@ const Dashboard: React.FC = () => {
                                     </Table>
                                 </IonCol>
                                 <IonCol>
-                                    <DoughnutChart title='Uscite'/>
+                                    <DoughnutChart title='Uscite' total={350}/>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>

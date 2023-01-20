@@ -5,10 +5,11 @@ import { Doughnut } from 'react-chartjs-2';
 import "./DoughnutChart.css"
 
 type DoughnutChartPros = {
-  title: string
+  title: string,
+  total: number
 }
 
-const DoughnutChart = ({title}: DoughnutChartPros) =>{
+const DoughnutChart = ({title, total}: DoughnutChartPros) =>{
     useIonViewWillEnter(() => {
         ChartJS.register(CategoryScale);
       }, []);
@@ -35,7 +36,8 @@ const DoughnutChart = ({title}: DoughnutChartPros) =>{
     return(
         <div className="exit-chart">
             <span className="chart-title">{title}</span>
-            <Doughnut data={data}/>
+            <Doughnut data={data} />
+            <span className="chart-total">{total}</span>
         </div>
     )
 }
