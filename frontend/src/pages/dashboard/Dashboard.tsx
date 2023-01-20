@@ -6,7 +6,7 @@ import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
 import Table from '../../components/widget/table/Table';
 import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
-import DoughnutChart from '../../components/charts/doughnutChart/DoughnutChart';
+import Charts from '../../components/charts/Charts';
 
 
 const Dashboard: React.FC = () => {
@@ -56,7 +56,17 @@ const Dashboard: React.FC = () => {
                                     </Table>
                                 </IonCol>
                                 <IonCol>
-                                    <DoughnutChart title='Uscite' total={350}/>
+                                    <Charts />
+                                </IonCol>
+                                <IonCol size='12'>
+                                    <Table>
+                                        <h3 className='section-title'>Spese programmate</h3>
+                                        <TableItem title='Pagamento pos' value={36.50} recipient="McDonald's" outflow={true} currency='$'/>
+                                        <TableItem title='Pagamento pos' value={36.50} recipient="McDonald's" outflow={true} currency='$'/>
+                                        <TableItem title='Pagamento pos' value={36.35} recipient="McDonald's" outflow={true} currency='$'/>
+                                        <TableItem title='Pagamento pos' value={36.25} recipient="McDonald's" outflow={true} currency='$'/>
+                                        <IonButton expand='block' slot='end'>Visualizza spsese programmate</IonButton>
+                                    </Table>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>

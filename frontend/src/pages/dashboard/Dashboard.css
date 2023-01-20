@@ -18,3 +18,9 @@ ion-fab-list ion-button{
     border-radius: 30px;
     margin-top: 15px;
 }
+
+.section-title{
+    font-size: 18px;
+    color: #11263A;
+    font-weight: 900;
+}
