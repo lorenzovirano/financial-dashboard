@@ -19,9 +19,10 @@ exports.register = (req, res, next) => {
 
 exports.login = (req, res, next) => {
     const {username, password} = req.body;
-
+    console.log(req)
     userService.login({username, password}, (error, result) => {
         if(error){
+            
             return next(error);
         }
         return res.status(200).send({

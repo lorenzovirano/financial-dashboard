@@ -1,15 +1,35 @@
 import './Login.css'
-import { IonPage, IonHeader, IonToolbar, IonTitle, useIonRouter, IonContent, IonButton } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, useIonRouter, IonContent, IonButton, IonInput } from '@ionic/react';
+import { useState } from 'react'
 
 const Login: React.FC = () => {
     const navigation = useIonRouter();
 
-    const doLogin = () => {
-        navigation.push('/app', 'root', 'replace');
+    const doLogin = async () => {
+        await fetch('http://localhost:4000/users/login', {
+            "method": 'POST',
+            "body": JSON.stringify({
+                username: username,
+                password: password
+            }),
+            "headers": {
+                'Content-type': 'application/json',
+            },
+
+        })
+            .then((response) => {
+                response.json()
+                navigation.push('/app', 'root', 'replace');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+        //
     }
 
-
-    return(
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
@@ -17,12 +37,25 @@ const Login: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <IonButton onClick={() => doLogin()} expand='full'>
-                    Login
-                </IonButton>   
+
+                <form  >
+                    <IonInput placeholder='Username'
+                        required
+                        type="email"
+                        onIonChange={(e: any) => setUsername(e.target.value)}>
+                    </IonInput>
+                    <IonInput type='password' placeholder='Password' onIonInput={(e: any) => setPassword(e.target.value)}></IonInput>
+
+                    <IonButton onClick={doLogin} expand='full'>
+                        Login
+                    </IonButton>
+                </form>
+
             </IonContent>
-        </IonPage>
+        </IonPage >
     )
 }
+
+
 
 export default Login;
