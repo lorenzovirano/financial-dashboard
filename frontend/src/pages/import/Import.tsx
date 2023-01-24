@@ -5,6 +5,11 @@ import {downloadOutline} from 'ionicons/icons'
 import './Import.css'
 
 const Import: React.FC = () => {
+    let elem = document.querySelector('.section-imports');
+    let rect = elem?.getBoundingClientRect();
+    let top = rect?.top;
+    let height = window.innerHeight - top!;
+    console.log(height);
     return(
        <IonPage>
             <IonHeader>
@@ -28,7 +33,7 @@ const Import: React.FC = () => {
                         </IonRow>
                     </IonGrid>
                 </Layout>
-                <section className="section-imports">
+                <section className="section-imports" style={{height: height}}>
                     <Layout>
                         <IonGrid>
                             <IonRow>
