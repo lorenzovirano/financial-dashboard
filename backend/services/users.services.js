@@ -47,7 +47,7 @@ async function getUser(req, callback){
         req.user = user.data;
     });
     let id = req.user
-    const user = await Transaction.find({ id_user: id}).populate("transactions")
+    const user = await Transaction.find({ id_user: id}).populate("user")
     if(user != null){
         return callback(null, user)
     }else{
