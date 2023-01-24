@@ -17,6 +17,9 @@ const userSchema = new Schema ({
         type: String,
         required: true
     },
+    transactions: {
+        type: mongoose.Types.ObjectId, ref: "transaction",
+    },
     date: {
         type: Date,
         default: Date.now()

@@ -1,6 +1,7 @@
 import './Login.css'
 import { IonPage, IonHeader, IonToolbar, IonTitle, useIonRouter, IonContent, IonButton, IonInput } from '@ionic/react';
 import { useState } from 'react'
+import { key } from 'ionicons/icons';
 
 const Login: React.FC = () => {
     const navigation = useIonRouter();
@@ -18,8 +19,11 @@ const Login: React.FC = () => {
 
         })
             .then((response) => {
-                response.json()
-                navigation.push('/app', 'root', 'replace');
+                let jwt = response.json()
+                    .then((res) => {
+                        localStorage.setItem("jwt", res.data.token)
+                        navigation.push('/app', 'root', 'replace');
+                    })
             })
             .catch((err) => {
                 console.log(err.message);

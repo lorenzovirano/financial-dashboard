@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const user = require('./user.model')
 
 const transactionSchema = new Schema ({
     type: {
@@ -18,9 +19,8 @@ const transactionSchema = new Schema ({
         type: Date,
         required: true
     },
-    id_user: {
-        type: String, 
-        required: true
+    user: {
+        type: mongoose.Types.ObjectId, ref: "user",
     },
     created_at: {
         type: Date,
