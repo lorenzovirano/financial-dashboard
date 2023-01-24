@@ -33,14 +33,16 @@ exports.login = (req, res, next) => {
 
 exports.userProfile = (req, res, next) =>{
 
-    userService.getUser(req, (error,result) => {
+    userService.getUser(req, (error,{transactions, user, wallet}) => {
         if(error){
             
             return next(error);
         }
         return res.status(200).send({
             message: "Success",
-            data: result
+            data: transactions,
+            user: user,
+            wallet: wallet
         });
     })
 };

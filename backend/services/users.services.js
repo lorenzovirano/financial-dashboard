@@ -47,9 +47,15 @@ async function getUser(req, callback){
         req.user = user.data;
     });
     let id = req.user
-    const user = await Transaction.find({ id_user: id}).populate("user")
-    if(user != null){
-        return callback(null, user)
+    const user = await User.findById(id)
+    const transactions = await Transaction.find({ id_user: id})
+    let wallet = 0
+    for await (const transaction of transactions){
+        wallet += parseInt(transaction.cash) 
+    }
+    wallet = wallet.toString()
+    if(transactions != null){
+        return callback(null, {transactions, user, wallet})
     }else{
         return callback("Invalid")
     }

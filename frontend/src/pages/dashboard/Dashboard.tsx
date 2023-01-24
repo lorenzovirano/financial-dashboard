@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 
 const Dashboard: React.FC = () => {
     const [username, setUsername] = useState("");
+    const [wallet, setWallet] = useState("");
     const navigation = useIonRouter();
     useEffect(() => {
         const getUser = async () => {
@@ -33,7 +34,8 @@ const Dashboard: React.FC = () => {
                     console.log(response);
                     let user = response.json()
                         .then((res) => {
-                            setUsername(res.data.username)
+                            setUsername(res.user.username)
+                            setWallet(res.wallet)
                         })
                 })
                 .catch((err) => {
@@ -63,7 +65,7 @@ const Dashboard: React.FC = () => {
                         <IonRow>
                             <IonCol size='12'>
                                 <CreditCards />
-                                <TotalBalance currency='$' total={83785712} />
+                                <TotalBalance currency='$' total={wallet} />
                             </IonCol>
                         </IonRow>
                     </IonGrid>
