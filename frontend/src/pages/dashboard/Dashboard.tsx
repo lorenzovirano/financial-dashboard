@@ -20,9 +20,9 @@ const Dashboard: React.FC = () => {
         const getUser = async () => {
 
             let jwt = localStorage.getItem("jwt")
-            if (jwt === "null" || jwt === undefined) {
+            /* if (jwt === "null" || jwt === undefined) {
                 navigation.push('/', 'root', 'replace');
-            }
+            } */
             let headers = new Headers();
             headers.append('Content-type', 'application/json');
             headers.append('Authorization', jwt || "no");
