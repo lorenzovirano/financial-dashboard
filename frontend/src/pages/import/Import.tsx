@@ -5,11 +5,12 @@ import {downloadOutline} from 'ionicons/icons'
 import './Import.css'
 
 const Import: React.FC = () => {
+    /* Script per calcolare l'altezza della sezione imports */
     let elem = document.querySelector('.section-imports');
     let rect = elem?.getBoundingClientRect();
     let top = rect?.top;
     let height = window.innerHeight - top!;
-    console.log(height);
+    /* TODO: Implementare la funzione con useEffect per chiamarla ad ogni caricamento del componente */
     return(
        <IonPage>
             <IonHeader>
