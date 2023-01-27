@@ -1,6 +1,6 @@
 import './Dashboard.css';
-import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption } from '@ionic/react';
-import { add } from 'ionicons/icons'
+import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal } from '@ionic/react';
+import { add, closeOutline, removeOutline, addOutline } from 'ionicons/icons'
 import Layout from '../../components/layout/Layout';
 import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
 import Table from '../../components/widget/table/Table';
@@ -15,6 +15,8 @@ import { useEffect, useState } from 'react';
 const Dashboard: React.FC = () => {
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
+    const [isOpenIn, setIsOpenIn] = useState(false);
+    const [isOpenOut, setIsOpenOut] = useState(false);
     const navigation = useIonRouter();
     useEffect(() => {
         const getUser = async () => {
@@ -116,12 +118,40 @@ const Dashboard: React.FC = () => {
                         <IonIcon icon={add} />
                     </IonFabButton>
                     <IonFabList side='top'>
-                        <IonButton>Entrata</IonButton>
-                    </IonFabList>
-                    <IonFabList side='start'>
-                        <IonButton>Uscita</IonButton>
+                        <IonFabButton onClick={() => setIsOpenIn(true)}>
+                            <IonIcon icon={addOutline}/>
+                        </IonFabButton>
+                        <IonFabButton onClick={() => setIsOpenOut(true)}>
+                            <IonIcon icon={removeOutline}/>
+                        </IonFabButton>
                     </IonFabList>
                 </IonFab>
+                <IonModal isOpen={isOpenIn}>
+                    <IonHeader>
+                        <IonToolbar>
+                        <IonTitle>Entrata</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => setIsOpenIn(false)}><IonIcon icon={closeOutline}/></IonButton>
+                        </IonButtons>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding">
+
+                    </IonContent>
+                </IonModal>
+                <IonModal isOpen={isOpenOut}>
+                    <IonHeader>
+                        <IonToolbar>
+                        <IonTitle>Uscita</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => setIsOpenOut(false)}><IonIcon icon={closeOutline}/></IonButton>
+                        </IonButtons>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent className="ion-padding">
+
+                    </IonContent>
+                </IonModal>
             </IonContent>
         </IonPage>
     );
