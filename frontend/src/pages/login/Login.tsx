@@ -49,7 +49,7 @@ const Login: React.FC = () => {
                         <IonInput className='login__input' 
                             placeholder='Username'
                             required
-                            type="email"
+                            type='text'
                             onIonChange={(e: any) => setUsername(e.target.value)}>
                         </IonInput>
                         <IonInput className='login__input' type='password' placeholder='Password' onIonInput={(e: any) => setPassword(e.target.value)}></IonInput>
