@@ -1,5 +1,5 @@
 import './Dashboard.css';
-import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal } from '@ionic/react';
+import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal, IonLabel, IonInput } from '@ionic/react';
 import { add, closeOutline, removeOutline, addOutline } from 'ionicons/icons'
 import Layout from '../../components/layout/Layout';
 import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
@@ -17,14 +17,18 @@ const Dashboard: React.FC = () => {
     const [wallet, setWallet] = useState("");
     const [isOpenIn, setIsOpenIn] = useState(false);
     const [isOpenOut, setIsOpenOut] = useState(false);
+    const [cat, setCat] = useState<string>();
+    const pushCat = (catMsg: string) => {
+        setCat(catMsg);
+    }
     const navigation = useIonRouter();
     useEffect(() => {
         const getUser = async () => {
 
             let jwt = localStorage.getItem("jwt")
-            /* if (jwt === "null" || jwt === undefined) {
+            if (jwt === "null" || jwt === undefined) {
                 navigation.push('/', 'root', 'replace');
-            } */
+            }
             let headers = new Headers();
             headers.append('Content-type', 'application/json');
             headers.append('Authorization', jwt || "no");
@@ -126,6 +130,7 @@ const Dashboard: React.FC = () => {
                         </IonFabButton>
                     </IonFabList>
                 </IonFab>
+                {/*TODO:  Inserire i modali in componenti figli e gestire lo stato, probabilmente sarà necessario utilizzare Redux*/}
                 <IonModal isOpen={isOpenIn}>
                     <IonHeader>
                         <IonToolbar>
@@ -135,8 +140,34 @@ const Dashboard: React.FC = () => {
                         </IonButtons>
                         </IonToolbar>
                     </IonHeader>
-                    <IonContent className="ion-padding">
-
+                    <IonContent>
+                        <Layout>
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol size='12'>
+                                        <IonList>
+                                            <IonItem fill="outline">
+                                                <IonLabel position="floating">Titolo</IonLabel>
+                                                <IonInput placeholder="Inserisci titolo quì..."></IonInput>
+                                            </IonItem>
+                                            <IonItem fill="outline">
+                                                <IonLabel position="floating">Valore</IonLabel>
+                                                <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
+                                            </IonItem>
+                                            <IonSelect placeholder="Seleziona categoria" 
+                                            onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)} 
+                                            className="ion-padding">
+                                                <IonSelectOption value="shopping">Shopping</IonSelectOption>
+                                                <IonSelectOption value="food">Food</IonSelectOption>
+                                            </IonSelect>
+                                            <IonSelect placeholder={`Sottocategoria`}>
+                                                <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
+                                            </IonSelect>
+                                        </IonList>
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                        </Layout>
                     </IonContent>
                 </IonModal>
                 <IonModal isOpen={isOpenOut}>
@@ -148,8 +179,34 @@ const Dashboard: React.FC = () => {
                         </IonButtons>
                         </IonToolbar>
                     </IonHeader>
-                    <IonContent className="ion-padding">
-
+                    <IonContent>
+                        <Layout>
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol size='12'>
+                                        <IonList>
+                                            <IonItem fill="outline">
+                                                <IonLabel position="floating">Titolo</IonLabel>
+                                                <IonInput placeholder="Inserisci titolo quì..."></IonInput>
+                                            </IonItem>
+                                            <IonItem fill="outline">
+                                                <IonLabel position="floating">Valore</IonLabel>
+                                                <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
+                                            </IonItem>
+                                            <IonSelect placeholder="Seleziona categoria" 
+                                            onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)} 
+                                            className="ion-padding">
+                                                <IonSelectOption value="shopping">Shopping</IonSelectOption>
+                                                <IonSelectOption value="food">Food</IonSelectOption>
+                                            </IonSelect>
+                                            <IonSelect placeholder={`Sottocategoria`}>
+                                                <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
+                                            </IonSelect>
+                                        </IonList>
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                        </Layout>
                     </IonContent>
                 </IonModal>
             </IonContent>
