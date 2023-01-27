@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'finance-dashboard',
+  appName: 'budget-buddy',
   webDir: 'build',
   bundledWebRuntime: false
 };
