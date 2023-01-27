@@ -15,7 +15,7 @@ const Import: React.FC = () => {
        <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonButtons>
+                    <IonButtons slot='start'>
                         <IonMenuButton></IonMenuButton>
                     </IonButtons>
                     <IonTitle>Import</IonTitle>
