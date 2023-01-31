@@ -49,7 +49,7 @@ app.use(
 app.use(express.json());
 
 app.use('/users', require('./routes/users.routes'));
-app.use('/csv', require("./routes/transactions.routes"));
+app.use('/transaction', require("./routes/transactions.routes"));
 app.use(errors.errorHandler);
 
 app.listen(process.env.port || 4000, function () {

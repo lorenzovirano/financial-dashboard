@@ -11,3 +11,27 @@ exports.import = (req, res, next) => {
         });
     }); 
 }
+
+exports.getTypes = (req, res, next) => {
+    transactionService.getTypes(req, (error, result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Success",
+            data: result
+        })
+    }); 
+}
+
+exports.getCategories = (req, res, next) => {
+    transactionService.getCategories(req, (error, result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Success",
+            data: result
+        })
+    })
+}

@@ -7,14 +7,22 @@ import Table from '../../components/widget/table/Table';
 import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
 import Charts from '../../components/charts/Charts';
-import { useEffect, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
+import { type } from 'os';
 
 
 
 
 const Dashboard: React.FC = () => {
+
+    interface Type {
+        name?: String,
+        _id?: Key
+    }
+
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
+    const [types, setTypes] = useState<Type[]>();
     const [isOpenIn, setIsOpenIn] = useState(false);
     const [isOpenOut, setIsOpenOut] = useState(false);
     const [cat, setCat] = useState<string>();
@@ -23,8 +31,7 @@ const Dashboard: React.FC = () => {
     }
     const navigation = useIonRouter();
     useEffect(() => {
-        const getUser = async () => {
-
+        const checkHeaders = async () => {
             let jwt = localStorage.getItem("jwt")
             if (jwt === "null" || jwt === undefined) {
                 navigation.push('/', 'root', 'replace');
@@ -32,6 +39,13 @@ const Dashboard: React.FC = () => {
             let headers = new Headers();
             headers.append('Content-type', 'application/json');
             headers.append('Authorization', jwt || "no");
+            getUser(headers)
+            getTypes(headers)
+        }
+
+        const getUser = async (headers: any) => {
+
+
             await fetch('http://localhost:4000/users/user-profile', {
                 "method": 'GET',
                 "headers": headers,
@@ -50,9 +64,24 @@ const Dashboard: React.FC = () => {
             //
 
         }
-
-        getUser();
-
+        const getTypes = async (headers: any) => {
+            await fetch('http://localhost:4000/transaction/types', {
+                "method": 'GET',
+                "headers": headers,
+            })
+                .then((response) => {
+                    console.log(response);
+                    let type = response.json()
+                        .then((res) => {
+                            setTypes(res.data)
+                            console.log(types)
+                        })
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        }
+        checkHeaders();
     }, [])
 
     return (
@@ -123,10 +152,10 @@ const Dashboard: React.FC = () => {
                     </IonFabButton>
                     <IonFabList side='top'>
                         <IonFabButton onClick={() => setIsOpenIn(true)}>
-                            <IonIcon icon={addOutline}/>
+                            <IonIcon icon={addOutline} />
                         </IonFabButton>
                         <IonFabButton onClick={() => setIsOpenOut(true)}>
-                            <IonIcon icon={removeOutline}/>
+                            <IonIcon icon={removeOutline} />
                         </IonFabButton>
                     </IonFabList>
                 </IonFab>
@@ -134,10 +163,10 @@ const Dashboard: React.FC = () => {
                 <IonModal isOpen={isOpenIn}>
                     <IonHeader>
                         <IonToolbar>
-                        <IonTitle>Entrata</IonTitle>
-                        <IonButtons slot="end">
-                            <IonButton onClick={() => setIsOpenIn(false)}><IonIcon icon={closeOutline}/></IonButton>
-                        </IonButtons>
+                            <IonTitle>Entrata</IonTitle>
+                            <IonButtons slot="end">
+                                <IonButton onClick={() => setIsOpenIn(false)}><IonIcon icon={closeOutline} /></IonButton>
+                            </IonButtons>
                         </IonToolbar>
                     </IonHeader>
                     <IonContent>
@@ -154,11 +183,17 @@ const Dashboard: React.FC = () => {
                                                 <IonLabel position="floating">Valore</IonLabel>
                                                 <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
-                                            <IonSelect placeholder="Seleziona categoria" 
-                                            onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)} 
-                                            className="ion-padding">
-                                                <IonSelectOption value="shopping">Shopping</IonSelectOption>
-                                                <IonSelectOption value="food">Food</IonSelectOption>
+                                            <IonSelect placeholder="Seleziona categoria"
+                                                onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)}
+                                                className="ion-padding">
+                                                {types?.map((type) =>
+                                                    <IonSelectOption key={type._id} value={type}>
+                                                        {type.name}
+                                                    </IonSelectOption>
+                                                )
+
+                                                }
+
                                             </IonSelect>
                                             <IonSelect placeholder={`Sottocategoria`}>
                                                 <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
@@ -173,10 +208,10 @@ const Dashboard: React.FC = () => {
                 <IonModal isOpen={isOpenOut}>
                     <IonHeader>
                         <IonToolbar>
-                        <IonTitle>Uscita</IonTitle>
-                        <IonButtons slot="end">
-                            <IonButton onClick={() => setIsOpenOut(false)}><IonIcon icon={closeOutline}/></IonButton>
-                        </IonButtons>
+                            <IonTitle>Uscita</IonTitle>
+                            <IonButtons slot="end">
+                                <IonButton onClick={() => setIsOpenOut(false)}><IonIcon icon={closeOutline} /></IonButton>
+                            </IonButtons>
                         </IonToolbar>
                     </IonHeader>
                     <IonContent>
@@ -193,9 +228,9 @@ const Dashboard: React.FC = () => {
                                                 <IonLabel position="floating">Valore</IonLabel>
                                                 <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
-                                            <IonSelect placeholder="Seleziona categoria" 
-                                            onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)} 
-                                            className="ion-padding">
+                                            <IonSelect placeholder="Seleziona categoria"
+                                                onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)}
+                                                className="ion-padding">
                                                 <IonSelectOption value="shopping">Shopping</IonSelectOption>
                                                 <IonSelectOption value="food">Food</IonSelectOption>
                                             </IonSelect>

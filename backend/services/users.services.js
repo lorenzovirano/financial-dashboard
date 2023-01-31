@@ -48,7 +48,9 @@ async function getUser(req, callback){
     });
     let id = req.user
     const user = await User.findById(id)
-    const transactions = await Transaction.find({ id_user: id})
+    console.log(user)
+    const transactions = await Transaction.find({ user: id })
+
     let wallet = 0
     for await (const transaction of transactions){
         wallet += parseInt(transaction.cash) 

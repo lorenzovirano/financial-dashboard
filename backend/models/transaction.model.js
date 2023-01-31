@@ -4,8 +4,10 @@ const user = require('./user.model')
 
 const transactionSchema = new Schema ({
     type: {
-        type: String,
-        required: true
+        type: mongoose.Types.ObjectId, ref: "types",
+    },
+    category: {
+        type: mongoose.Types.ObjectId, ref: "categories",
     },
     description: {
         type: String,
@@ -20,7 +22,7 @@ const transactionSchema = new Schema ({
         required: true
     },
     user: {
-        type: mongoose.Types.ObjectId, ref: "user",
+        type: mongoose.Types.ObjectId, ref: "users",
     },
     created_at: {
         type: Date,
