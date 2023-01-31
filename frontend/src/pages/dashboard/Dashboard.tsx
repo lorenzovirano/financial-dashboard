@@ -8,7 +8,6 @@ import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
 import Charts from '../../components/charts/Charts';
 import { Key, useEffect, useState } from 'react';
-import { type } from 'os';
 
 
 
