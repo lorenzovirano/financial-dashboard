@@ -2,7 +2,6 @@ import './Login.css'
 import { IonPage, IonHeader, IonToolbar, IonTitle, useIonRouter, IonContent, IonButton, IonInput, IonImg, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import { useState } from 'react'
 import Layout from '../../components/layout/Layout';
-import { key } from 'ionicons/icons';
 
 const Login: React.FC = () => {
     const navigation = useIonRouter();
@@ -53,7 +52,7 @@ const Login: React.FC = () => {
                             onIonChange={(e: any) => setUsername(e.target.value)}>
                         </IonInput>
                         <IonInput className='login__input' type='password' placeholder='Password' onIonInput={(e: any) => setPassword(e.target.value)}></IonInput>
-                        <a href='#' className='password-recovery'>Non ricordo la password</a>
+                        <a href='/' className='password-recovery'>Non ricordo la password</a>
                         <IonButton onClick={doLogin} expand='full' className='login__btn'>
                             Login
                         </IonButton>
