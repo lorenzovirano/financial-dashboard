@@ -189,10 +189,7 @@ const Dashboard: React.FC = () => {
                                                     <IonSelectOption key={type._id} value={type}>
                                                         {type.name}
                                                     </IonSelectOption>
-                                                )
-
-                                                }
-
+                                                )}
                                             </IonSelect>
                                             <IonSelect placeholder={`Sottocategoria`}>
                                                 <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
@@ -230,8 +227,11 @@ const Dashboard: React.FC = () => {
                                             <IonSelect placeholder="Seleziona categoria"
                                                 onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)}
                                                 className="ion-padding">
-                                                <IonSelectOption value="shopping">Shopping</IonSelectOption>
-                                                <IonSelectOption value="food">Food</IonSelectOption>
+                                                {types?.map((type) =>
+                                                    <IonSelectOption key={type._id} value={type}>
+                                                        {type.name}
+                                                    </IonSelectOption>
+                                                )}
                                             </IonSelect>
                                             <IonSelect placeholder={`Sottocategoria`}>
                                                 <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
