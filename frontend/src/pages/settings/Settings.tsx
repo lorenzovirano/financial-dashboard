@@ -1,5 +1,6 @@
 import './Settings.css'
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle } from "@ionic/react"
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonRow, IonGrid, IonCol, IonSearchbar, IonList, IonItem } from "@ionic/react"
+import Layout from '../../components/layout/Layout';
 
 const Settings: React.FC = () => {
     return(
@@ -12,6 +13,16 @@ const Settings: React.FC = () => {
                         <IonTitle>Settings</IonTitle>
                     </IonToolbar>
             </IonHeader>
+            <IonContent>
+                <Layout>
+                    <IonSearchbar animated={true} placeholder="Animated"></IonSearchbar>
+                    <IonList>
+                        <IonItem>Account</IonItem>
+                        <IonItem>Conti</IonItem>
+                        <IonItem>Pagamenti</IonItem>
+                    </IonList>
+                </Layout>
+            </IonContent>
         </IonPage>
     )
 }
