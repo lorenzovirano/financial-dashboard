@@ -52,7 +52,7 @@ async function getTypes(req, callback){
 }
 
 async function getCategories(req, callback){
-    const categories = await Category.find({ type: req.body.type })
+    const categories = await Category.find({ type: req.query.id })
     if(categories != null){
         return callback(null, categories);
     }else{

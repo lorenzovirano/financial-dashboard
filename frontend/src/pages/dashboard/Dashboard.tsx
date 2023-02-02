@@ -8,6 +8,7 @@ import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
 import Charts from '../../components/charts/Charts';
 import { Key, useEffect, useState } from 'react';
+import { CategoryScale } from 'chart.js';
 
 
 
@@ -18,15 +19,39 @@ const Dashboard: React.FC = () => {
         name?: String,
         _id?: Key
     }
-
+    interface Category {
+        name?: String,
+        _id?: Key
+    }
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
     const [types, setTypes] = useState<Type[]>();
     const [isOpenIn, setIsOpenIn] = useState(false);
     const [isOpenOut, setIsOpenOut] = useState(false);
-    const [cat, setCat] = useState<string>();
-    const pushCat = (catMsg: string) => {
-        setCat(catMsg);
+    const [cat, setCat] = useState<Category[]>();
+    const pushCat = async (catMsg: string) => {
+
+        let jwt = localStorage.getItem("jwt")
+        if (jwt === "null" || jwt === undefined) {
+            navigation.push('/', 'root', 'replace');
+        }
+        let headers = new Headers();
+        headers.append('Content-type', 'application/json');
+        headers.append('Authorization', jwt || "no");
+        await fetch('http://localhost:4000/transaction/categories?id=' + catMsg, {
+            "method": 'GET',
+            "headers": headers,
+        })
+            .then((response) => {
+                console.log(response);
+                let user = response.json()
+                    .then((res) => {
+                        setCat(res.data)
+                    })
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
     }
     const navigation = useIonRouter();
     useEffect(() => {
@@ -183,16 +208,19 @@ const Dashboard: React.FC = () => {
                                                 <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
                                             <IonSelect placeholder="Seleziona categoria"
-                                                onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)}
+                                                onIonChange={(e) => pushCat(e.detail.value)}
                                                 className="ion-padding">
                                                 {types?.map((type) =>
-                                                    <IonSelectOption key={type._id} value={type}>
+                                                    <IonSelectOption key={type._id} value={type._id}>
                                                         {type.name}
                                                     </IonSelectOption>
                                                 )}
                                             </IonSelect>
-                                            <IonSelect placeholder={`Sottocategoria`}>
-                                                <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
+                                            <IonSelect value={null} placeholder={`Sottocategoria`}>
+                                                {cat?.map((category) =>
+                                                    <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
+                                                )}
+
                                             </IonSelect>
                                         </IonList>
                                     </IonCol>
@@ -234,7 +262,6 @@ const Dashboard: React.FC = () => {
                                                 )}
                                             </IonSelect>
                                             <IonSelect placeholder={`Sottocategoria`}>
-                                                <IonSelectOption value={`${cat}sub`}>{cat}</IonSelectOption>
                                             </IonSelect>
                                         </IonList>
                                     </IonCol>
