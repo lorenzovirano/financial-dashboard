@@ -1,5 +1,5 @@
 import './Login.css'
-import { IonPage, IonHeader, IonToolbar, IonTitle, useIonRouter, IonContent, IonButton, IonInput, IonImg, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, useIonRouter, IonContent, IonButton, IonInput, IonImg } from '@ionic/react';
 import { useState } from 'react'
 import Layout from '../../components/layout/Layout';
 
@@ -57,14 +57,7 @@ const Login: React.FC = () => {
                             Login
                         </IonButton>
                     </form>
-                    <IonSegment value="default" color="secondary">
-                        <IonSegmentButton value="default">
-                            <IonLabel>Login</IonLabel>
-                        </IonSegmentButton>
-                        <IonSegmentButton value="segment">
-                            <IonLabel>Signup</IonLabel>
-                        </IonSegmentButton>
-                    </IonSegment>
+                    <a href='/signup' className='password-recovery'>Hai già un account?</a>
                 </Layout>
             </IonContent>
         </IonPage >

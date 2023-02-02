@@ -1,5 +1,5 @@
 import './Dashboard.css';
-import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal, IonLabel, IonInput } from '@ionic/react';
+import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal, IonLabel, IonInput, IonDatetime } from '@ionic/react';
 import { add, closeOutline, removeOutline, addOutline } from 'ionicons/icons'
 import Layout from '../../components/layout/Layout';
 import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
@@ -220,8 +220,9 @@ const Dashboard: React.FC = () => {
                                                 {cat?.map((category) =>
                                                     <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
                                                 )}
-
                                             </IonSelect>
+                                            <IonDatetime locale='it-IT' />
+                                            <IonButton>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>
@@ -263,6 +264,8 @@ const Dashboard: React.FC = () => {
                                             </IonSelect>
                                             <IonSelect placeholder={`Sottocategoria`}>
                                             </IonSelect>
+                                            <IonDatetime locale='it-IT' />
+                                            <IonButton>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>
