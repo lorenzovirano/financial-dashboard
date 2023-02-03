@@ -8,5 +8,6 @@ router.post("/import", multer({ storage: storage }).single("csv"), transactionsC
 //router.get("/export", transactionsController.export);
 router.get("/types", transactionsController.getTypes);
 router.get("/categories", transactionsController.getCategories)
+router.post("/create", transactionsController.createTransaction)
 
 module.exports = router;

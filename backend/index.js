@@ -42,7 +42,7 @@ app.use(
             { url : "/users/login", methods: ["POST"]},
             { url : "/users/register", methods: ["POST"]}
         ]
-    })
+    }) 
 )
 
 

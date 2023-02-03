@@ -76,10 +76,11 @@ async function create (req, callback){
         category: req.body.category,
         description: req.body.description,
         date: req.body.date,
-        user: req.body.id
+        cash: req.body.cash,
+        user: id
     }).save()
     .then((response) => {
-        return callback(null, transaction)
+        return callback(null, response)
     })
     .catch((error) => {
         return callback(error);

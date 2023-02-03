@@ -29,8 +29,12 @@ const Dashboard: React.FC = () => {
     const [isOpenIn, setIsOpenIn] = useState(false);
     const [isOpenOut, setIsOpenOut] = useState(false);
     const [cat, setCat] = useState<Category[]>();
-    const pushCat = async (catMsg: string) => {
-
+    const [category, setCategory] = useState("")
+    const [type, setType] = useState("")
+    const [date, setDate] = useState("")
+    const [value, setValue] = useState("")
+    const [title, setTitle] = useState("")
+    const submitTransaction = async () => {
         let jwt = localStorage.getItem("jwt")
         if (jwt === "null" || jwt === undefined) {
             navigation.push('/', 'root', 'replace');
@@ -38,20 +42,63 @@ const Dashboard: React.FC = () => {
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
         headers.append('Authorization', jwt || "no");
-        await fetch('http://localhost:4000/transaction/categories?id=' + catMsg, {
+        let payload = {
+            "description": title,
+            "type": type,
+            "date": date,
+            "category": category,
+            "cash": value
+        }
+        await fetch('http://localhost:4000/transaction/create', {
+            "method": "POST",
+            "headers": headers,
+            "body": JSON.stringify(payload)
+        })
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
+
+    const pushType = async (idType: string) => {
+        let jwt = localStorage.getItem("jwt")
+        if (jwt === "null" || jwt === undefined) {
+            navigation.push('/', 'root', 'replace');
+        }
+        let headers = new Headers();
+        headers.append('Content-type', 'application/json');
+        headers.append('Authorization', jwt || "no");
+        await fetch('http://localhost:4000/transaction/categories?id=' + idType, {
             "method": 'GET',
             "headers": headers,
         })
             .then((response) => {
                 console.log(response);
-                let user = response.json()
+                let cat = response.json()
                     .then((res) => {
+                        setType(idType)
                         setCat(res.data)
                     })
             })
             .catch((err) => {
                 console.log(err.message);
             });
+    }
+
+    const storeDate = async (dateSelected: any) => {
+        setDate(dateSelected)
+    }
+    const pushCat = async (catSelected: any) => {
+        setCategory(catSelected)
+    }
+    const pushValue = async (valueSelected: any) => {
+        setValue(valueSelected)
+    }
+    const pushTitle = async (titleSelected: any) => {
+        setTitle(titleSelected)
     }
     const navigation = useIonRouter();
     useEffect(() => {
@@ -201,14 +248,14 @@ const Dashboard: React.FC = () => {
                                         <IonList>
                                             <IonItem fill="outline">
                                                 <IonLabel position="floating">Titolo</IonLabel>
-                                                <IonInput placeholder="Inserisci titolo quì..."></IonInput>
+                                                <IonInput onIonInput={(e) => pushTitle(e.target.value)} placeholder="Inserisci titolo quì..."></IonInput>
                                             </IonItem>
                                             <IonItem fill="outline">
                                                 <IonLabel position="floating">Valore</IonLabel>
-                                                <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
+                                                <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
                                             <IonSelect placeholder="Seleziona categoria"
-                                                onIonChange={(e) => pushCat(e.detail.value)}
+                                                onIonChange={(e) => pushType(e.target.value)}
                                                 className="ion-padding">
                                                 {types?.map((type) =>
                                                     <IonSelectOption key={type._id} value={type._id}>
@@ -216,13 +263,13 @@ const Dashboard: React.FC = () => {
                                                     </IonSelectOption>
                                                 )}
                                             </IonSelect>
-                                            <IonSelect value={null} placeholder={`Sottocategoria`}>
+                                            <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`}>
                                                 {cat?.map((category) =>
                                                     <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
                                                 )}
                                             </IonSelect>
-                                            <IonDatetime locale='it-IT' />
-                                            <IonButton>Crea transazione</IonButton>
+                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' />
+                                            <IonButton onClick={(e) => submitTransaction()} disabled={date === "" || category === null || type === null || title === "" || value === ""}>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>
@@ -247,25 +294,28 @@ const Dashboard: React.FC = () => {
                                         <IonList>
                                             <IonItem fill="outline">
                                                 <IonLabel position="floating">Titolo</IonLabel>
-                                                <IonInput placeholder="Inserisci titolo quì..."></IonInput>
+                                                <IonInput onIonInput={(e) => pushTitle(e.target.value)} placeholder="Inserisci titolo quì..."></IonInput>
                                             </IonItem>
                                             <IonItem fill="outline">
                                                 <IonLabel position="floating">Valore</IonLabel>
-                                                <IonInput placeholder="Inserisci valore quì..." type='number'></IonInput>
+                                                <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
                                             <IonSelect placeholder="Seleziona categoria"
-                                                onIonChange={(e) => pushCat(`Sottocategorie di ${e.detail.value}`)}
+                                                onIonChange={(e) => pushCat(e.detail.value)}
                                                 className="ion-padding">
                                                 {types?.map((type) =>
-                                                    <IonSelectOption key={type._id} value={type}>
+                                                    <IonSelectOption key={type._id} value={type._id}>
                                                         {type.name}
                                                     </IonSelectOption>
                                                 )}
                                             </IonSelect>
-                                            <IonSelect placeholder={`Sottocategoria`}>
+                                            <IonSelect value={null} placeholder={`Sottocategoria`}>
+                                                {cat?.map((category) =>
+                                                    <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
+                                                )}
                                             </IonSelect>
-                                            <IonDatetime locale='it-IT' />
-                                            <IonButton>Crea transazione</IonButton>
+                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' />
+                                            <IonButton onClick={(e) => submitTransaction()}>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>

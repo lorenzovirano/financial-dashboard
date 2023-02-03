@@ -35,3 +35,15 @@ exports.getCategories = (req, res, next) => {
         })
     })
 }
+
+exports.createTransaction = (req, res, next) => {
+    transactionService.create(req, (error,result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Succes",
+            data: result
+        })
+    })
+}
