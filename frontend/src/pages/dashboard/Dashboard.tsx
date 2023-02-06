@@ -235,7 +235,6 @@ const Dashboard: React.FC = () => {
                                         {transactions?.map((transaction) =>
                                             <TableItem title={transaction.description} value={transaction.cash} recipient={transaction.date} outflow={transaction.cash < 0} currency='$' />
                                         )}
-
                                         <IonButton expand='block' slot='end'>Visualizza tutti i movimenti</IonButton>
                                     </Table>
                                 </IonCol>

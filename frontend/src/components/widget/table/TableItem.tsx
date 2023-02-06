@@ -17,7 +17,7 @@ const TableItem = ({title, value, recipient, outflow, currency}: tableItemProps)
                 <span className="table-item__recipient">{recipient}</span>
             </div>
             <div className="table-item__right">
-                <span className={`table-item__value ${outflow ? ('exit') : ('enter')}`}>{outflow ? ('-') : ('')}{currency}{value}</span>
+                <span className={`table-item__value ${outflow ? ('exit') : ('enter')}`}>{currency}{value}</span>
             </div>
         </div>
     )
