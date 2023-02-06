@@ -24,3 +24,15 @@ ion-fab-list ion-button{
     color: #11263A;
     font-weight: 900;
 }
+
+.ion-padding{
+    padding-left: 0!important;
+}
+.container-select{
+    margin: 25px 0;
+}
+
+.custom-datatime{
+    border-radius: 25px;
+    margin-bottom: 25px;
+}

@@ -113,6 +113,13 @@ const Dashboard: React.FC = () => {
     const pushTitle = async (titleSelected: any) => {
         setTitle(titleSelected)
     }
+    const getCurrentDate = () => {
+        const date = new Date();
+
+        let currentJSON = date.toJSON();
+        
+        return currentJSON;
+    }
     const navigation = useIonRouter();
     useEffect(() => {
         const checkHeaders = async () => {
@@ -278,29 +285,31 @@ const Dashboard: React.FC = () => {
                                 <IonRow>
                                     <IonCol size='12'>
                                         <IonList>
-                                            <IonItem fill="outline">
+                                            <IonItem fill="outline" className='ion-no-padding'>
                                                 <IonLabel position="floating">Titolo</IonLabel>
                                                 <IonInput onIonInput={(e) => pushTitle(e.target.value)} placeholder="Inserisci titolo quì..."></IonInput>
                                             </IonItem>
-                                            <IonItem fill="outline">
+                                            <IonItem fill="outline" className='ion-no-padding'>
                                                 <IonLabel position="floating">Valore</IonLabel>
                                                 <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
-                                            <IonSelect placeholder="Seleziona categoria"
-                                                onIonChange={(e) => pushType(e.target.value)}
-                                                className="ion-padding">
-                                                {types?.map((type) =>
-                                                    <IonSelectOption key={type._id} value={type._id}>
-                                                        {type.name}
-                                                    </IonSelectOption>
-                                                )}
-                                            </IonSelect>
-                                            <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`}>
-                                                {cat?.map((category) =>
-                                                    <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
-                                                )}
-                                            </IonSelect>
-                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' />
+                                            <div className="container-select">
+                                                <IonSelect placeholder="Seleziona categoria"
+                                                    onIonChange={(e) => pushType(e.target.value)}
+                                                    className="ion-padding">
+                                                    {types?.map((type) =>
+                                                        <IonSelectOption key={type._id} value={type._id}>
+                                                            {type.name}
+                                                        </IonSelectOption>
+                                                    )}
+                                                </IonSelect>
+                                                <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`} className='ion-padding'>
+                                                    {cat?.map((category) =>
+                                                        <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
+                                                    )}
+                                                </IonSelect>
+                                            </div>
+                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' className='custom-datatime' max={`${getCurrentDate()}`} />
                                             <IonButton onClick={(e) => submitTransaction(false)} disabled={date === "" || category === null || type === null || title === "" || value === 0}>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
@@ -324,29 +333,31 @@ const Dashboard: React.FC = () => {
                                 <IonRow>
                                     <IonCol size='12'>
                                         <IonList>
-                                            <IonItem fill="outline">
+                                            <IonItem fill="outline" className='ion-no-padding'>
                                                 <IonLabel position="floating">Titolo</IonLabel>
                                                 <IonInput onIonInput={(e) => pushTitle(e.target.value)} placeholder="Inserisci titolo quì..."></IonInput>
                                             </IonItem>
-                                            <IonItem fill="outline">
+                                            <IonItem fill="outline" className='ion-no-padding'>
                                                 <IonLabel position="floating">Valore</IonLabel>
                                                 <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
-                                            <IonSelect placeholder="Seleziona categoria"
-                                                onIonChange={(e) => pushType(e.detail.value)}
-                                                className="ion-padding">
-                                                {types?.map((type) =>
-                                                    <IonSelectOption key={type._id} value={type._id}>
-                                                        {type.name}
-                                                    </IonSelectOption>
-                                                )}
-                                            </IonSelect>
-                                            <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`}>
-                                                {cat?.map((category) =>
-                                                    <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
-                                                )}
-                                            </IonSelect>
-                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' />
+                                            <div className="container-select">
+                                                <IonSelect placeholder="Seleziona categoria"
+                                                    onIonChange={(e) => pushType(e.detail.value)}
+                                                    className="ion-padding">
+                                                    {types?.map((type) =>
+                                                        <IonSelectOption key={type._id} value={type._id}>
+                                                            {type.name}
+                                                        </IonSelectOption>
+                                                    )}
+                                                </IonSelect>
+                                                <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`} className='ion-padding'>
+                                                    {cat?.map((category) =>
+                                                        <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
+                                                    )}
+                                                </IonSelect>
+                                            </div>
+                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' className='custom-datatime' max={`${getCurrentDate()}`} />
                                             <IonButton onClick={(e) => submitTransaction(true)} disabled={date === "" || category === null || type === null || title === "" || value === 0}>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
