@@ -58,7 +58,7 @@ const Login: React.FC = () => {
                         </IonButton>
                     </form>
                     <IonItem routerLink='/signup' className='ion-no-padding'>
-                        Hai già un account?
+                        Non hai un account?
                     </IonItem>
                 </Layout>
             </IonContent>

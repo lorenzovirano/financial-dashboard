@@ -45,6 +45,13 @@ const Register: React.FC = () => {
                                 </form>
                             </IonCol>
                         </IonRow>
+                        <IonRow>
+                            <IonCol>
+                                <IonItem routerLink='/' className='ion-no-padding'>
+                                    Hai già un account?
+                                </IonItem>
+                            </IonCol>
+                        </IonRow>
                     </IonGrid>
                 </Layout>
             </IonContent>
