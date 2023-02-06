@@ -16,6 +16,7 @@ const Register: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
+                                <h1 className='page-title'>Registrati a Budget Buddy!</h1>
                                 <form action="#">
                                     <div className="container-input">
                                         <IonItem fill="solid" className='ion-no-padding'>
