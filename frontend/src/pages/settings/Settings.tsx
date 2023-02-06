@@ -15,11 +15,11 @@ const Settings: React.FC = () => {
             </IonHeader>
             <IonContent>
                 <Layout>
-                    <IonSearchbar animated={true} placeholder="Animated"></IonSearchbar>
+                    <IonSearchbar animated={true} placeholder="Animated" className='ion-no-padding'></IonSearchbar>
                     <IonList>
-                        <IonItem>Account</IonItem>
-                        <IonItem>Conti</IonItem>
-                        <IonItem>Pagamenti</IonItem>
+                        <IonItem className='ion-no-padding'>Account</IonItem>
+                        <IonItem className='ion-no-padding'>Conti</IonItem>
+                        <IonItem className='ion-no-padding'>Pagamenti</IonItem>
                     </IonList>
                 </Layout>
             </IonContent>
