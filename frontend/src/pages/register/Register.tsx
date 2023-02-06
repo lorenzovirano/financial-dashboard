@@ -17,26 +17,28 @@ const Register: React.FC = () => {
                         <IonRow>
                             <IonCol size='12'>
                                 <form action="#">
-                                    <IonItem fill="solid">
-                                        <IonLabel position="floating">Nome</IonLabel>
-                                        <IonInput type="text"></IonInput>
-                                    </IonItem>
-                                    <IonItem fill="solid">
-                                        <IonLabel position="floating">Cognome</IonLabel>
-                                        <IonInput type="text"></IonInput>
-                                    </IonItem>
-                                    <IonItem fill="solid">
-                                        <IonLabel position="floating">Email</IonLabel>
-                                        <IonInput type="email"></IonInput>
-                                    </IonItem>
-                                    <IonItem fill="solid">
-                                        <IonLabel position="floating">Password</IonLabel>
-                                        <IonInput type="password"></IonInput>
-                                    </IonItem>
-                                    <IonItem fill="solid">
-                                        <IonLabel position="floating">Ripeti Password</IonLabel>
-                                        <IonInput type="password"></IonInput>
-                                    </IonItem>
+                                    <div className="container-input">
+                                        <IonItem fill="solid" className='ion-no-padding'>
+                                            <IonLabel position="floating">Nome</IonLabel>
+                                            <IonInput type="text"></IonInput>
+                                        </IonItem>
+                                        <IonItem fill="solid" className='ion-no-padding'>
+                                            <IonLabel position="floating">Cognome</IonLabel>
+                                            <IonInput type="text"></IonInput>
+                                        </IonItem>
+                                        <IonItem fill="solid" className='ion-no-padding'>
+                                            <IonLabel position="floating">Email</IonLabel>
+                                            <IonInput type="email"></IonInput>
+                                        </IonItem>
+                                        <IonItem fill="solid" className='ion-no-padding'>
+                                            <IonLabel position="floating">Password</IonLabel>
+                                            <IonInput type="password"></IonInput>
+                                        </IonItem>
+                                        <IonItem fill="solid" className='ion-no-padding'>
+                                            <IonLabel position="floating">Ripeti Password</IonLabel>
+                                            <IonInput type="password"></IonInput>
+                                        </IonItem>
+                                    </div>
                                     <IonButton type='submit'>
                                         Registrati
                                     </IonButton>

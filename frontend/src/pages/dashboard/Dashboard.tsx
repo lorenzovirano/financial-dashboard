@@ -293,7 +293,7 @@ const Dashboard: React.FC = () => {
                                                 <IonLabel position="floating">Valore</IonLabel>
                                                 <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
-                                            <div className="container-select">
+                                            <div className="container-input">
                                                 <IonSelect placeholder="Seleziona categoria"
                                                     onIonChange={(e) => pushType(e.target.value)}
                                                     className="ion-padding">
