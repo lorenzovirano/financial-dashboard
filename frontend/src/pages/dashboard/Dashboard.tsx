@@ -23,6 +23,14 @@ const Dashboard: React.FC = () => {
         name?: String,
         _id?: Key
     }
+    interface Transaction {
+        description: string,
+        cash: number,
+        date: string,
+        type: String,
+        category: String,
+        _id: number
+    }
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
     const [types, setTypes] = useState<Type[]>();
@@ -32,9 +40,10 @@ const Dashboard: React.FC = () => {
     const [category, setCategory] = useState("")
     const [type, setType] = useState("")
     const [date, setDate] = useState("")
-    const [value, setValue] = useState("")
+    let [value, setValue] = useState<Number>()
     const [title, setTitle] = useState("")
-    const submitTransaction = async () => {
+    const [transactions, setTransaction] = useState<Transaction[]>()
+    const submitTransaction = async (negative: boolean) => {
         let jwt = localStorage.getItem("jwt")
         if (jwt === "null" || jwt === undefined) {
             navigation.push('/', 'root', 'replace');
@@ -42,6 +51,10 @@ const Dashboard: React.FC = () => {
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
         headers.append('Authorization', jwt || "no");
+        console.log(negative)
+        if (negative === true && value !== undefined) {
+            value = +value * -1
+        }
         let payload = {
             "description": title,
             "type": type,
@@ -112,6 +125,7 @@ const Dashboard: React.FC = () => {
             headers.append('Authorization', jwt || "no");
             getUser(headers)
             getTypes(headers)
+            getTransactions(headers)
         }
 
         const getUser = async (headers: any) => {
@@ -146,6 +160,24 @@ const Dashboard: React.FC = () => {
                         .then((res) => {
                             setTypes(res.data)
                             console.log(types)
+                        })
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        }
+
+        const getTransactions = async (headers: any) => {
+            await fetch('http://localhost:4000/transaction/show?limit=4', {
+                "method": 'GET',
+                "headers": headers,
+            })
+                .then((response) => {
+                    console.log(response);
+                    response.json()
+                        .then((res) => {
+                            setTransaction(res.data)
+                            console.log(transactions)
                         })
                 })
                 .catch((err) => {
@@ -193,10 +225,10 @@ const Dashboard: React.FC = () => {
                                 </IonCol>
                                 <IonCol size='12'>
                                     <Table>
-                                        <TableItem title='Pagamento pos' value={36.50} recipient="McDonald's" outflow={true} currency='$' />
-                                        <TableItem title='Pagamento pos' value={36.50} recipient="McDonald's" outflow={false} currency='$' />
-                                        <TableItem title='Pagamento pos' value={36.35} recipient="McDonald's" outflow={false} currency='$' />
-                                        <TableItem title='Pagamento pos' value={36.25} recipient="McDonald's" outflow={true} currency='$' />
+                                        {transactions?.map((transaction) =>
+                                            <TableItem title={transaction.description} value={transaction.cash} recipient={transaction.date} outflow={transaction.cash < 0} currency='$' />
+                                        )}
+
                                         <IonButton expand='block' slot='end'>Visualizza tutti i movimenti</IonButton>
                                     </Table>
                                 </IonCol>
@@ -269,7 +301,7 @@ const Dashboard: React.FC = () => {
                                                 )}
                                             </IonSelect>
                                             <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' />
-                                            <IonButton onClick={(e) => submitTransaction()} disabled={date === "" || category === null || type === null || title === "" || value === ""}>Crea transazione</IonButton>
+                                            <IonButton onClick={(e) => submitTransaction(false)} disabled={date === "" || category === null || type === null || title === "" || value === 0}>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>
@@ -301,7 +333,7 @@ const Dashboard: React.FC = () => {
                                                 <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
                                             </IonItem>
                                             <IonSelect placeholder="Seleziona categoria"
-                                                onIonChange={(e) => pushCat(e.detail.value)}
+                                                onIonChange={(e) => pushType(e.detail.value)}
                                                 className="ion-padding">
                                                 {types?.map((type) =>
                                                     <IonSelectOption key={type._id} value={type._id}>
@@ -309,13 +341,13 @@ const Dashboard: React.FC = () => {
                                                     </IonSelectOption>
                                                 )}
                                             </IonSelect>
-                                            <IonSelect value={null} placeholder={`Sottocategoria`}>
+                                            <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`}>
                                                 {cat?.map((category) =>
                                                     <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
                                                 )}
                                             </IonSelect>
                                             <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' />
-                                            <IonButton onClick={(e) => submitTransaction()}>Crea transazione</IonButton>
+                                            <IonButton onClick={(e) => submitTransaction(true)} disabled={date === "" || category === null || type === null || title === "" || value === 0}>Crea transazione</IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>

@@ -47,3 +47,15 @@ exports.createTransaction = (req, res, next) => {
         })
     })
 }
+
+exports.showTransactions = (req, res, next) => {
+    transactionService.show(req, (error, result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Succes",
+            data: result
+        })
+    })
+}

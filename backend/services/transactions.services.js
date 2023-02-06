@@ -115,8 +115,14 @@ async function show (req, callback){
         if(err) return res.sendStatus(403);
         req.user = user.data;
     });
-    const transaction = new Transaction.findById(req.body.id)
+    let id = req.user
+    let transaction = await Transaction.find({ user: id}).limit(req.query.limit || null).sort({ created_at: "desc"})
     if(transaction != null){
+        transaction = JSON.stringify(transaction)
+        transaction = JSON.parse(transaction)
+        transaction.forEach(trans => {
+            trans.date = new Date(trans.date).toLocaleString()
+        });
         return callback(null, transaction)
     }else{
         return callback(error)
