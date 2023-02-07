@@ -8,14 +8,15 @@ type chartsProps = {
     data: any;
 }
 
-const Charts = ({data}: chartsProps) => {
+const Charts = ({ data }: chartsProps) => {
+    console.log(data)
     return (
         <IonSlides pager={true} mode="ios">
             <IonSlide>
-                <DoughnutChart title="Uscite" total={3500}/>
+                <DoughnutChart label={data.resultLabel} cash={data.resultCash} title="Uscite" total={data.total} />
             </IonSlide>
             <IonSlide>
-                <LineChart title="Entrate"/>
+                <LineChart title="Entrate" />
             </IonSlide>
         </IonSlides>
     )

@@ -47,6 +47,7 @@ async function getRevenue(id){
     let types = await Type.find()
     let resultLabel = new Array
     let resultCash = new Array
+    let total = 0.00
     types.forEach(type => {
         let flag = 0
         let wallet = 0.00
@@ -60,10 +61,10 @@ async function getRevenue(id){
         if(flag == 1){
             resultLabel.push(type.name)
             resultCash.push(wallet)
+            total += wallet
         }
     })
-    console.log({resultCash: resultCash, resultLabel: resultLabel})
-    return {resultCash: resultCash, resultLabel: resultLabel}
+    return {resultCash: resultCash, resultLabel: resultLabel, total: total }
 }
 
 
@@ -80,8 +81,8 @@ async function getUser(req, callback){
     for await (const transaction of transactions){
         wallet += parseFloat(transaction.cash)
     }
-    let revenues = getRevenue(id)
-    
+    let revenues = await getRevenue(id)
+    console.log(revenues)
     wallet = wallet.toString()
     if(transactions != null){
         return callback(null, {transactions, user, wallet, revenues})

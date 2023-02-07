@@ -42,6 +42,7 @@ const Dashboard: React.FC = () => {
     const [date, setDate] = useState("")
     let [value, setValue] = useState<Number>()
     const [title, setTitle] = useState("")
+    const [revenues, setRevenues] = useState("")
     const [transactions, setTransaction] = useState<Transaction[]>()
     const submitTransaction = async (negative: boolean) => {
         let jwt = localStorage.getItem("jwt")
@@ -117,7 +118,7 @@ const Dashboard: React.FC = () => {
         const date = new Date();
 
         let currentJSON = date.toJSON();
-        
+
         return currentJSON;
     }
     const navigation = useIonRouter();
@@ -148,6 +149,8 @@ const Dashboard: React.FC = () => {
                         .then((res) => {
                             setUsername(res.user.username)
                             setWallet(res.wallet)
+                            setRevenues(res.revenues)
+                            console.log(revenues)
                         })
                 })
                 .catch((err) => {
@@ -239,7 +242,7 @@ const Dashboard: React.FC = () => {
                                     </Table>
                                 </IonCol>
                                 <IonCol>
-                                    <Charts data={data}/>
+                                    <Charts data={revenues} />
                                 </IonCol>
                                 <IonCol size='12'>
                                     <Table>
