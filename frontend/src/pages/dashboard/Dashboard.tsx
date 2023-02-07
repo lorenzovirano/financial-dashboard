@@ -239,7 +239,7 @@ const Dashboard: React.FC = () => {
                                     </Table>
                                 </IonCol>
                                 <IonCol>
-                                    <Charts />
+                                    <Charts data={data}/>
                                 </IonCol>
                                 <IonCol size='12'>
                                     <Table>

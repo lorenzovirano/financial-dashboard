@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
             </IonHeader>
             <IonContent>
                 <Layout>
-                    <IonSearchbar animated={true} placeholder="Animated" className='ion-no-padding'></IonSearchbar>
+                    <IonSearchbar animated={true} placeholder="Cerca nelle impostazioni..." className='ion-no-padding'></IonSearchbar>
                     <IonList>
                         <IonItem className='ion-no-padding'>Account</IonItem>
                         <IonItem className='ion-no-padding'>Conti</IonItem>

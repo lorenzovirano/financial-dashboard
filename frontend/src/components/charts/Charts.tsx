@@ -3,7 +3,12 @@ import DoughnutChart from "./doughnutChart/DoughnutChart";
 import LineChart from "./lineChart/LineChart";
 import { IonSlides, IonSlide } from "@ionic/react"
 
-const Charts: React.FC = () => {
+
+type chartsProps = {
+    data: any;
+}
+
+const Charts = ({data}: chartsProps) => {
     return (
         <IonSlides pager={true} mode="ios">
             <IonSlide>
