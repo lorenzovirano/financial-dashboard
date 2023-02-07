@@ -33,7 +33,7 @@ exports.login = (req, res, next) => {
 
 exports.userProfile = (req, res, next) =>{
 
-    userService.getUser(req, (error,{transactions, user, wallet}) => {
+    userService.getUser(req, (error,{transactions, user, wallet, revenues}) => {
         if(error){
             
             return next(error);
@@ -42,7 +42,8 @@ exports.userProfile = (req, res, next) =>{
             message: "Success",
             data: transactions,
             user: user,
-            wallet: wallet
+            wallet: wallet,
+            revenues: revenues
         });
     })
 };
