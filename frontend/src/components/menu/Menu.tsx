@@ -8,6 +8,7 @@ import Family from '../../pages/family/Family';
 import './Menu.css'
 import Settings from '../../pages/settings/Settings';
 import Payments from '../../pages/payments/Payments';
+import Bank from '../../pages/bank/Bank';
 
 const Menu: React.FC = () => {
     const navigation = useIonRouter();
@@ -16,7 +17,7 @@ const Menu: React.FC = () => {
         { name: 'Import Data', url: '/app/import', icon: downloadOutline },
         { name: 'Family', url: '/app/family', icon: peopleOutline },
         { name: 'Payments', url: '/app/payments', icon: createOutline },
-        { name: 'Settings', url: '/app/settings', icon: cogOutline }
+        { name: 'Settings', url: '/app/settings', icon: cogOutline },
     ]
     const doLogout = async () => {
         localStorage.setItem("jwt", "null")
@@ -49,7 +50,7 @@ const Menu: React.FC = () => {
                 <IonRouterOutlet id='main'>
                     <Route exact path="/app/dashboard" component={Dashboard} />
                     <Route exact path="/app/import" component={Import} />
-                    <Route exact path="/app/signup" component={Register} />
+                    <Route exact path="/app/insert-bank" component={Bank} />
                     <Route exact path="/app/family" component={Family} />
                     <Route exact path="/app/payments" component={Payments} />
                     <Route exact path="/app/settings" component={Settings} />

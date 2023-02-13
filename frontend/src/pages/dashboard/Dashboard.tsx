@@ -10,9 +10,6 @@ import Charts from '../../components/charts/Charts';
 import { Key, useEffect, useState } from 'react';
 import { CategoryScale } from 'chart.js';
 
-
-
-
 const Dashboard: React.FC = () => {
 
     interface Type {

@@ -61,3 +61,8 @@
     padding: 0 5px;
     text-align: left;
 }
+
+ion-button.btn--transparent{
+    --background: transparent;
+    height: auto;
+}

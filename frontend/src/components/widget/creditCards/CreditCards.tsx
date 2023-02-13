@@ -1,5 +1,5 @@
 import "./CreditCards.css"
-import { IonSlides, IonSlide, IonIcon} from "@ionic/react"
+import { IonSlides, IonSlide, IonIcon, IonButton} from "@ionic/react"
 import { addCircleOutline } from "ionicons/icons"
 
 const CreditCards: React.FC = () => {
@@ -50,7 +50,9 @@ const CreditCards: React.FC = () => {
                     <span className="credit-card__number">
                         Aggiungi un conto bancario
                     </span>
-                    <IonIcon icon={addCircleOutline}/>
+                    <IonButton routerLink="/app/insert-bank" className="btn--transparent">
+                        <IonIcon icon={addCircleOutline} />
+                    </IonButton>
                 </div>
             </IonSlide>
         </IonSlides>
