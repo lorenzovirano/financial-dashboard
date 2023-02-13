@@ -1,0 +1,26 @@
+.exit-chart{
+    background: #F4EDEA;
+    padding: 25px;
+    border-radius: 30px;
+    position: relative;
+    min-height: 341.5px;
+}
+.chart-title{
+    font-size: 18px;
+    color: #11263A;
+    font-weight: 800;
+}
+.exit-chart canvas{
+    z-index: 2;
+    position: relative;
+}
+.chart-total{
+    position: absolute;
+    top: 61%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #D14B21;
+    font-weight: 700;
+    z-index: 1;
+    font-size: 24px;
+}
