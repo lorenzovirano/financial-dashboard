@@ -1,8 +1,15 @@
 import "./CreditCards.css"
+import { useState, useEffect } from "react"
 import { IonSlides, IonSlide, IonIcon, IonButton} from "@ionic/react"
 import { addCircleOutline } from "ionicons/icons"
 
-const CreditCards: React.FC = () => {
+type CreditCardsProps = {
+    username: string,
+    bankName: any
+}
+
+const CreditCards = ({username, bankName}: CreditCardsProps) => {
+ 
     return (
         <IonSlides pager={true} mode="ios">
             <IonSlide>
@@ -12,7 +19,7 @@ const CreditCards: React.FC = () => {
                             Credit
                         </span>
                         <span className="credit-card__bank">
-                            YOUR BANK
+                            {bankName}
                         </span>
                     </div>
                     <div className="credit-card__down">
@@ -20,7 +27,7 @@ const CreditCards: React.FC = () => {
                             XXXX XXXX XXXX XXXX
                         </span>
                         <span className="credit-card__user-name">
-                            Name Surname
+                            {username}
                         </span>
                     </div>
                 </div>
@@ -29,7 +36,7 @@ const CreditCards: React.FC = () => {
                 <div className="credit-card">
                     <div className="credit-card__up">
                         <span className="credit-card__type">
-                            Credit
+                            Bank
                         </span>
                         <span className="credit-card__bank">
                             YOUR BANK

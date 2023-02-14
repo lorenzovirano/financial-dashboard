@@ -21,6 +21,26 @@ async function insertBanks (req, callback) {
     })
 }
 
+async function getBank(req, callback) {
+    const authHeader = req.headers.authorization;
+    const token = authHeader;
+    jwt.verify(token, "ProvaKey", (err, user) => {
+        if(err) return res.sendStatus(403);
+        req.user = user.data;
+    });
+    let id = req.user
+    let bank = await Bank.find({user: id});
+    if(bank != null){
+        bank = JSON.stringify(bank);
+        bank = JSON.parse(bank);
+        console.log(bank);
+        return callback(null, bank)
+    } else {
+        return callback(error)
+    }
+}
+
 module.exports = {
-    insertBanks
+    insertBanks,
+    getBank
 }

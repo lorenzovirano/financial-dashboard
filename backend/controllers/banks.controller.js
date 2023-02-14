@@ -11,3 +11,15 @@ exports.import = (req, res, next) => {
         });
     }); 
 }
+
+exports.getBank = (req, res, next) => {
+    bankService.getBank(req, (error, result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Success",
+            data: result
+        })
+    })
+}

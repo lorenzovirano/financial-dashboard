@@ -32,7 +32,7 @@ const Bank: React.FC = () => {
             "body": JSON.stringify(payload)
         })
             .then((response) => {
-                console.log(response)
+                navigation.push('/app/dashboard', 'root', 'replace');
             })
             .catch((err) => {
                 console.log(err)

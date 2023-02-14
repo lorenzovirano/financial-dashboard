@@ -28,6 +28,11 @@ const Dashboard: React.FC = () => {
         category: String,
         _id: number
     }
+    interface Bank {
+        bankName: string,
+        user: number
+        _id: number
+    }
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
     const [types, setTypes] = useState<Type[]>();
@@ -41,6 +46,7 @@ const Dashboard: React.FC = () => {
     const [title, setTitle] = useState("")
     const [revenues, setRevenues] = useState("")
     const [transactions, setTransaction] = useState<Transaction[]>()
+    const [bank, setBank] = useState<Bank>();
     const submitTransaction = async (negative: boolean) => {
         let jwt = localStorage.getItem("jwt")
         if (jwt === "null" || jwt === undefined) {
@@ -118,6 +124,7 @@ const Dashboard: React.FC = () => {
 
         return currentJSON;
     }
+
     const navigation = useIonRouter();
     useEffect(() => {
         const checkHeaders = async () => {
@@ -131,11 +138,28 @@ const Dashboard: React.FC = () => {
             getUser(headers)
             getTypes(headers)
             getTransactions(headers)
+            getBank(headers)
+        }
+
+        const getBank = async (headers: any) => {
+            await fetch('http://localhost:4000/bank/get-bank', {
+                "method": 'GET',
+                "headers": headers,
+            })
+                .then((response) => {
+                    console.log(response);
+                    let bankRes = response.json()
+                        .then((res) => {
+                            setBank(res.data)
+                            // console.log(bank)
+                        })
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
         }
 
         const getUser = async (headers: any) => {
-
-
             await fetch('http://localhost:4000/users/user-profile', {
                 "method": 'GET',
                 "headers": headers,
@@ -209,7 +233,7 @@ const Dashboard: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
-                                <CreditCards />
+                                <CreditCards username={username} bankName={bank}/>
                                 <TotalBalance currency='$' total={wallet} />
                             </IonCol>
                         </IonRow>
