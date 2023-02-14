@@ -29,9 +29,9 @@ const Dashboard: React.FC = () => {
         _id: number
     }
     interface Bank {
-        bankName: string,
-        user: number
-        _id: number
+        bankName?: string,
+        user?: string
+        _id?: number
     }
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
     const [title, setTitle] = useState("")
     const [revenues, setRevenues] = useState("")
     const [transactions, setTransaction] = useState<Transaction[]>()
-    const [bank, setBank] = useState<Bank>();
+    const [bank, setBank] = useState<Bank[]>();
     const submitTransaction = async (negative: boolean) => {
         let jwt = localStorage.getItem("jwt")
         if (jwt === "null" || jwt === undefined) {
@@ -147,11 +147,9 @@ const Dashboard: React.FC = () => {
                 "headers": headers,
             })
                 .then((response) => {
-                    console.log(response);
                     let bankRes = response.json()
                         .then((res) => {
                             setBank(res.data)
-                            // console.log(bank)
                         })
                 })
                 .catch((err) => {
@@ -233,7 +231,7 @@ const Dashboard: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
-                                <CreditCards username={username} bankName={bank}/>
+                                <CreditCards username={username} banks={bank} />
                                 <TotalBalance currency='$' total={wallet} />
                             </IonCol>
                         </IonRow>
