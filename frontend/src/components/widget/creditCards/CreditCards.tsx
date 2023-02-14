@@ -1,7 +1,9 @@
 import "./CreditCards.css"
 import { useState, useEffect } from "react"
-import { IonSlides, IonSlide, IonIcon, IonButton } from "@ionic/react"
+import { IonIcon, IonButton } from "@ionic/react"
 import { addCircleOutline } from "ionicons/icons"
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, EffectCards } from 'swiper';
 
 
 type CreditCardsProps = {
@@ -12,21 +14,15 @@ type CreditCardsProps = {
 const CreditCards = ({ username, banks }: CreditCardsProps) => {
     console.log(banks)
     return (
-        <IonSlides pager={true} mode="ios">
-
-            <IonSlide>
-                <div className="credit-card credit-card--add">
-                    <span className="credit-card__number">
-                        Aggiungi un conto bancario
-                    </span>
-                    <IonButton routerLink="/app/insert-bank" className="btn--transparent">
-                        <IonIcon icon={addCircleOutline} />
-                    </IonButton>
-                </div>
-            </IonSlide>
-
+        <Swiper
+        spaceBetween={25}
+        slidesPerView={1}
+        modules={[ Pagination, EffectCards ]}
+        pagination={{ clickable: true }}
+        effect="cards"
+        >
             {banks?.map((bank: any) =>
-                <IonSlide>
+                <SwiperSlide>
                     <div className="credit-card">
                         <div className="credit-card__up">
                             <span className="credit-card__type">
@@ -45,11 +41,19 @@ const CreditCards = ({ username, banks }: CreditCardsProps) => {
                             </span>
                         </div>
                     </div>
-                </IonSlide>
-            )}
-
-        </IonSlides>
-
+                </SwiperSlide>
+            )} 
+                <SwiperSlide>
+                    <div className="credit-card credit-card--add">
+                        <span className="credit-card__number">
+                            Aggiungi un conto bancario
+                        </span>
+                        <IonButton routerLink="/app/insert-bank" className="btn--transparent">
+                            <IonIcon icon={addCircleOutline} />
+                        </IonButton>
+                    </div>
+                </SwiperSlide>
+        </Swiper>
     )
 }
 

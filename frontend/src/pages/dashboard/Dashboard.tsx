@@ -8,7 +8,6 @@ import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
 import Charts from '../../components/charts/Charts';
 import { Key, useEffect, useState } from 'react';
-import { CategoryScale } from 'chart.js';
 
 const Dashboard: React.FC = () => {
 
@@ -231,7 +230,7 @@ const Dashboard: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
-                                <CreditCards username={username} banks={bank} />
+                                    <CreditCards username={username} banks={bank} />
                                 <TotalBalance currency='$' total={wallet} />
                             </IonCol>
                         </IonRow>
