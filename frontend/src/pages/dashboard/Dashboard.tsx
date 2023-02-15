@@ -10,7 +10,6 @@ import Charts from '../../components/charts/Charts';
 import { Key, useEffect, useState } from 'react';
 
 const Dashboard: React.FC = () => {
-
     interface Type {
         name?: String,
         _id?: Key

@@ -1,6 +1,8 @@
-import { IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonContent, IonGrid, IonRow, IonCol, IonInput, IonList, IonItem, IonLabel, IonButton, useIonRouter} from '@ionic/react';
-import { useState } from 'react';
+import { IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonContent, IonGrid, IonRow, IonCol, IonInput, IonList, IonItem, IonLabel, IonButton, useIonRouter, NavContext } from '@ionic/react';
+import { useState, useContext, useCallback } from 'react';
+import { Route } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
+import Dashboard from '../dashboard/Dashboard';
 import './Bank.css';
 
 const Bank: React.FC = () => {
@@ -8,7 +10,11 @@ const Bank: React.FC = () => {
         name: String,
         _id: number
     }
-
+    const {navigate} = useContext(NavContext);
+    const redirect = useCallback(
+        () => navigate('/app/dashboard', 'back'),
+        [navigate]
+      );
     const [bankName, setBankName] = useState<BankService[]>()
     const navigation = useIonRouter();
     const storeName = async (nameSelected: any) => {
@@ -32,7 +38,7 @@ const Bank: React.FC = () => {
             "body": JSON.stringify(payload)
         })
             .then((response) => {
-                navigation.push('/app/dashboard', 'root', 'replace');
+                redirect();
             })
             .catch((err) => {
                 console.log(err)
