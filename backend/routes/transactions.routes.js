@@ -10,4 +10,6 @@ router.get("/types", transactionsController.getTypes);
 router.get("/categories", transactionsController.getCategories)
 router.post("/create", transactionsController.createTransaction)
 router.get("/show",transactionsController.showTransactions)
+router.get("/show-positive",transactionsController.showTransactions)
+router.get("/show-negative",transactionsController.showTransactions)
 module.exports = router;

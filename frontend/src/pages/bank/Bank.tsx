@@ -1,8 +1,6 @@
 import { IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonContent, IonGrid, IonRow, IonCol, IonInput, IonList, IonItem, IonLabel, IonButton, useIonRouter, NavContext } from '@ionic/react';
 import { useState, useContext, useCallback } from 'react';
-import { Route } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import Dashboard from '../dashboard/Dashboard';
 import './Bank.css';
 
 const Bank: React.FC = () => {
