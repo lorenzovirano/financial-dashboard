@@ -21,11 +21,14 @@ exports.login = (req, res, next) => {
     const {username, password} = req.body;
     userService.login({username, password}, (error, result) => {
         if(error){
-            
             return next(error);
         }
+
+        const token = typeof result === 'object' && result.token ? result.token : result;
+
         return res.status(200).send({
             message: "Success",
+            token: token,
             data: result
         });
     });

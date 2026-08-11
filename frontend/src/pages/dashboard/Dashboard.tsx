@@ -1,6 +1,6 @@
 import './Dashboard.css';
-import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonFabList, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal, IonLabel, IonInput, IonDatetime } from '@ionic/react';
-import { add, closeOutline, removeOutline, addOutline } from 'ionicons/icons'
+import { IonCol, IonGrid, IonRow, IonHeader, IonTitle, useIonRouter, IonToolbar, IonPage, IonButtons, IonMenuButton, IonContent, IonFab, IonFabButton, IonIcon, IonButton, IonList, IonItem, IonSelect, IonSelectOption, IonModal, IonInput, IonDatetime, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import { add, closeOutline } from 'ionicons/icons'
 import Layout from '../../components/layout/Layout';
 import TotalBalance from '../../components/widget/totalBalance/TotalBalance';
 import Table from '../../components/widget/table/Table';
@@ -12,10 +12,12 @@ import { Key, useEffect, useState } from 'react';
 const Dashboard: React.FC = () => {
     interface Type {
         name?: String,
+        id?: string,
         _id?: Key
     }
     interface Category {
         name?: String,
+        id?: string,
         _id?: Key
     }
     interface Transaction {
@@ -31,167 +33,167 @@ const Dashboard: React.FC = () => {
         user?: string
         _id?: number
     }
+
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    
+    const [isExpense, setIsExpense] = useState<boolean>(true);
     const [types, setTypes] = useState<Type[]>();
-    const [isOpenIn, setIsOpenIn] = useState(false);
-    const [isOpenOut, setIsOpenOut] = useState(false);
     const [cat, setCat] = useState<Category[]>();
     const [category, setCategory] = useState("");
     const [type, setType] = useState("");
     const [date, setDate] = useState("");
-    let [value, setValue] = useState<Number>();
+    const [value, setValue] = useState<any>("");
     const [title, setTitle] = useState("");
-    const [revenues, setRevenues] = useState("");
+    
+    const [incomeTypeId, setIncomeTypeId] = useState<string>("");
+    const [expenseTypeId, setExpenseTypeId] = useState<string>("");
+
+    const [revenues, setRevenues] = useState<any>("");
     const [transactions, setTransaction] = useState<Transaction[]>();
     const [bank, setBank] = useState<Bank[]>();
-    const submitTransaction = async (negative: boolean) => {
+
+    const navigation = useIonRouter();
+
+    const submitTransaction = async () => {
         let jwt = localStorage.getItem("jwt")
-        if (jwt === "null" || jwt === undefined) {
+        if (jwt === "null" || !jwt) {
             navigation.push('/', 'root', 'replace');
+            return;
         }
+
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
-        headers.append('Authorization', jwt || "no");
-        console.log(negative)
-        if (negative === true && value !== undefined) {
-            value = +value * -1
+        headers.append('Authorization', jwt);
+
+        let finalValue = Number(value);
+        if (isExpense && finalValue > 0) {
+            finalValue = finalValue * -1;
+        } else if (!isExpense && finalValue < 0) {
+            finalValue = Math.abs(finalValue);
         }
+
         let payload = {
             "description": title,
             "type": type,
             "date": date,
             "category": category,
-            "cash": value
+            "cash": finalValue
         }
-        await fetch('http://localhost:4000/transaction/create', {
-            "method": "POST",
-            "headers": headers,
-            "body": JSON.stringify(payload)
-        })
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-
-
-    const pushType = async (idType: string) => {
-        let jwt = localStorage.getItem("jwt")
-        if (jwt === "null" || jwt === undefined) {
-            navigation.push('/', 'root', 'replace');
-        }
-        let headers = new Headers();
-        headers.append('Content-type', 'application/json');
-        headers.append('Authorization', jwt || "no");
-        await fetch('http://localhost:4000/transaction/categories?id=' + idType, {
-            "method": 'GET',
-            "headers": headers,
-        })
-            .then((response) => {
-                console.log(response);
-                let cat = response.json()
-                    .then((res) => {
-                        setType(idType)
-                        setCat(res.data)
-                    })
-            })
-            .catch((err) => {
-                console.log(err.message);
+        
+        try {
+            await fetch('http://localhost:8080/transaction/create', {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(payload)
             });
+            setIsOpenModal(false);
+            window.location.reload();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    const storeDate = async (dateSelected: any) => {
-        setDate(dateSelected)
-    }
-    const pushCat = async (catSelected: any) => {
-        setCategory(catSelected)
-    }
-    const pushValue = async (valueSelected: any) => {
-        setValue(valueSelected)
-    }
-    const pushTitle = async (titleSelected: any) => {
-        setTitle(titleSelected)
-    }
+    const fetchCategoriesForType = async (typeId: string, customHeaders?: Headers) => {
+        let jwt = localStorage.getItem("jwt");
+        let headers = customHeaders || new Headers({ 'Content-type': 'application/json', 'Authorization': jwt || "" });
+
+        setType(typeId);
+        setCategory("");
+
+        try {
+            const response = await fetch(`http://localhost:8080/categories/${typeId}`, {
+                method: 'GET',
+                headers: headers,
+            });
+            const res = await response.json();
+            setCat(res.data);
+        } catch (err: any) {
+            console.log(err.message);
+        }
+    };
+
+    const handleSegmentChange = (value: string) => {
+        const isOut = value === "out";
+        setIsExpense(isOut);
+        
+        const targetTypeId = isOut ? expenseTypeId : incomeTypeId;
+        if (targetTypeId) {
+            fetchCategoriesForType(targetTypeId);
+        }
+    };
+
     const getCurrentDate = () => {
         const date = new Date();
-
-        let currentJSON = date.toJSON();
-
-        return currentJSON;
+        return date.toJSON();
     }
 
-    const navigation = useIonRouter();
     useEffect(() => {
         const checkHeaders = async () => {
             let jwt = localStorage.getItem("jwt")
-            if (jwt === "null" || jwt === undefined) {
+            if (jwt === "null" || !jwt) {
                 navigation.push('/', 'root', 'replace');
+                return;
             }
             let headers = new Headers();
             headers.append('Content-type', 'application/json');
-            headers.append('Authorization', jwt || "no");
-            getUser(headers)
-            getTypes(headers)
-            getTransactions(headers, 'all')
-            getBank(headers)
+            headers.append('Authorization', jwt);
+            
+            await getUser(headers);
+            await getTypes(headers);
+            getTransactions(headers, 'all');
+            getBank(headers);
         }
 
         const getBank = async (headers: any) => {
-            await fetch('http://localhost:4000/bank/get-bank', {
-                "method": 'GET',
-                "headers": headers,
-            })
-                .then((response) => {
-                    let bankRes = response.json()
-                        .then((res) => {
-                            setBank(res.data)
-                        })
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
+            try {
+                const response = await fetch('http://localhost:8080/bank/', { method: 'GET', headers });
+                const res = await response.json();
+                setBank(res.data);
+            } catch (err: any) { console.log(err.message); }
         }
 
         const getUser = async (headers: any) => {
-            await fetch('http://localhost:4000/users/user-profile', {
-                "method": 'GET',
-                "headers": headers,
-            })
-                .then((response) => {
-                    console.log(response);
-                    let user = response.json()
-                        .then((res) => {
-                            setUsername(res.user.username)
-                            setWallet(res.wallet) // formatta con prettier pls
-                            setRevenues(res.revenues)
-                            console.log(revenues)
-                        })
-                })
-                .catch((err) => {
-                    console.log(err.message);
+            try {
+                const response = await fetch('http://localhost:8080/users/profile', { method: 'GET', headers });
+                const res = await response.json();
+                
+                console.log("Dati arrivati dal server:", res);
+                
+                setUsername(res.user?.username || '');
+                setWallet(res.wallet || '0');
+
+                setRevenues({
+                    resultLabel: res.revenues?.resultLabel || [],
+                    resultCash: res.revenues?.resultCash || [],
+                    total: res.revenues?.total || 0,
+                    incomeTrend: res.incomeTrend || { labels: [], data: [] }
                 });
-        }
-        const getTypes = async (headers: any) => {
-            await fetch('http://localhost:4000/transaction/types', {
-                "method": 'GET',
-                "headers": headers,
-            })
-                .then((response) => {
-                    console.log(response);
-                    let type = response.json()
-                        .then((res) => {
-                            setTypes(res.data)
-                            console.log(types)
-                        })
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
+            } catch (err: any) { console.log(err.message); }
         }
 
+        const getTypes = async (headers: any) => {
+            try {
+                const response = await fetch('http://localhost:8080/categories/types', { method: 'GET', headers });
+                const res = await response.json();
+                setTypes(res.data);
+                
+                const inc = res.data.find((t: any) => t.name.toLowerCase() === 'entrata');
+                const exp = res.data.find((t: any) => t.name.toLowerCase() === 'uscita');
+                
+                const incId = inc ? (inc.id || inc._id) : "";
+                const expId = exp ? (exp.id || exp._id) : "";
+
+                setIncomeTypeId(incId);
+                setExpenseTypeId(expId);
+
+                // Di default carichiamo le categorie delle uscite (visto che partiamo su Uscita)
+                if (expId) {
+                    fetchCategoriesForType(expId, headers);
+                }
+            } catch (err: any) { console.log(err.message); }
+        }
 
         checkHeaders();
     }, [])
@@ -200,50 +202,30 @@ const Dashboard: React.FC = () => {
         let jwt = localStorage.getItem("jwt")
         let headers = new Headers();
         headers.append('Content-type', 'application/json');
-        headers.append('Authorization', jwt || "no");
+        headers.append('Authorization', jwt || "");
         return headers;
     }
+
     async function getTransactions(headers: any, val: string){
         let res: Response;
-        switch(val){
-            case 'all':
-                try {
-                    res = await fetch('http://localhost:4000/transaction/show?limit=4', {
-                    "method": 'GET',
-                    "headers": headers,
-                });
-                let json = await res.json();
-                setTransaction(json.data);
-                } catch (error: any) {
-                    console.error(error.message);
-                }
-            break;
-            case 'pos':
-                try {
-                    res = await fetch('http://localhost:4000/transaction/show-positive?limit=4', {
-                    "method": 'GET',
-                    "headers": headers,
-                });
-                let json = await res.json();
-                setTransaction(json.data);
-                } catch(error: any) {
-                    console.error(error.message);
-                }
-
-
+        try {
+            switch(val){
+                case 'all':
+                    res = await fetch('http://localhost:8080/transaction/show?limit=4', { method: 'GET', headers });
                     break;
-            case 'neg':
-                try {
-                    res = await fetch('http://localhost:4000/transaction/show-negative?limit=4', {
-                    "method": 'GET',
-                    "headers": headers,
-                });
-                let json = await res.json();
-                setTransaction(json.data);
-                } catch(error: any) {
-                    console.error(error.message);
-                }
+                case 'pos':
+                    res = await fetch('http://localhost:8080/transaction/show-positive?limit=4', { method: 'GET', headers });
                     break;
+                case 'neg':
+                    res = await fetch('http://localhost:8080/transaction/show-negative?limit=4', { method: 'GET', headers });
+                    break;
+                default:
+                    return;
+            }
+            let json = await res.json();
+            setTransaction(json.data);
+        } catch (error: any) {
+            console.error(error.message);
         }
     }
 
@@ -262,7 +244,7 @@ const Dashboard: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
-                                    <CreditCards username={username} banks={bank} />
+                                <CreditCards username={username} banks={bank} />
                                 <TotalBalance currency='$' total={wallet} />
                             </IonCol>
                         </IonRow>
@@ -276,8 +258,7 @@ const Dashboard: React.FC = () => {
                                     <IonList>
                                         <IonItem>
                                             <IonSelect interface='popover' placeholder='Tutti i movimenti'
-                                            onIonChange={
-                                                (e) => getTransactions(getHeader(), e.detail.value)} // funzione che rompe
+                                            onIonChange={(e) => getTransactions(getHeader(), e.detail.value)}
                                             >
                                                 <IonSelectOption value="all">Tutti i movimenti</IonSelectOption> 
                                                 <IonSelectOption value="pos">Entrate</IonSelectOption>
@@ -289,7 +270,7 @@ const Dashboard: React.FC = () => {
                                 <IonCol size='12'>
                                     <Table>
                                         {transactions?.map((transaction) =>
-                                            <TableItem title={transaction.description} value={transaction.cash} recipient={transaction.date} outflow={transaction.cash < 0} currency='$' />
+                                            <TableItem key={transaction._id} title={transaction.description} value={transaction.cash} recipient={transaction.date} outflow={transaction.cash < 0} currency='$' />
                                         )}
                                         <IonButton expand='block' slot='end'>Visualizza tutti i movimenti</IonButton>
                                     </Table>
@@ -297,40 +278,24 @@ const Dashboard: React.FC = () => {
                                 <IonCol>
                                     <Charts data={revenues} />
                                 </IonCol>
-                                <IonCol size='12'>
-                                    <Table>
-                                        <h3 className='section-title'>Spese programmate</h3>
-                                        <TableItem title='Pagamento pos' value={36.50} recipient="McDonald's" outflow={true} currency='$' />
-                                        <TableItem title='Pagamento pos' value={36.50} recipient="McDonald's" outflow={true} currency='$' />
-                                        <TableItem title='Pagamento pos' value={36.35} recipient="McDonald's" outflow={true} currency='$' />
-                                        <TableItem title='Pagamento pos' value={36.25} recipient="McDonald's" outflow={true} currency='$' />
-                                        <IonButton expand='block' slot='end'>Visualizza spsese programmate</IonButton>
-                                    </Table>
-                                </IonCol>
                             </IonRow>
                         </IonGrid>
                     </Layout>
                 </section>
+
                 <IonFab slot="fixed" horizontal="end" vertical="bottom">
-                    <IonFabButton>
+                    <IonFabButton onClick={() => setIsOpenModal(true)}>
                         <IonIcon icon={add} />
                     </IonFabButton>
-                    <IonFabList side='top'>
-                        <IonFabButton onClick={() => setIsOpenIn(true)}>
-                            <IonIcon icon={addOutline} />
-                        </IonFabButton>
-                        <IonFabButton onClick={() => setIsOpenOut(true)}>
-                            <IonIcon icon={removeOutline} />
-                        </IonFabButton>
-                    </IonFabList>
                 </IonFab>
-                {/*TODO:  Inserire i modali in componenti figli e gestire lo stato, probabilmente sarà necessario utilizzare Redux*/}
-                <IonModal isOpen={isOpenIn}>
+
+                {/* Modale Unificata Movimento */}
+                <IonModal isOpen={isOpenModal} onDidDismiss={() => setIsOpenModal(false)}>
                     <IonHeader>
                         <IonToolbar>
-                            <IonTitle>Entrata</IonTitle>
+                            <IonTitle>Nuovo Movimento</IonTitle>
                             <IonButtons slot="end">
-                                <IonButton onClick={() => setIsOpenIn(false)}><IonIcon icon={closeOutline} /></IonButton>
+                                <IonButton onClick={() => setIsOpenModal(false)}><IonIcon icon={closeOutline} /></IonButton>
                             </IonButtons>
                         </IonToolbar>
                     </IonHeader>
@@ -340,80 +305,33 @@ const Dashboard: React.FC = () => {
                                 <IonRow>
                                     <IonCol size='12'>
                                         <IonList>
-                                            <IonItem fill="outline" className='ion-no-padding'>
-                                                <IonLabel position="floating">Titolo</IonLabel>
-                                                <IonInput onIonInput={(e) => pushTitle(e.target.value)} placeholder="Inserisci titolo quì..."></IonInput>
-                                            </IonItem>
-                                            <IonItem fill="outline" className='ion-no-padding'>
-                                                <IonLabel position="floating">Valore</IonLabel>
-                                                <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
-                                            </IonItem>
-                                            <div className="container-input">
+                                            <IonSegment value={isExpense ? "out" : "in"} onIonChange={e => handleSegmentChange(e.detail.value as string)} style={{ marginBottom: '15px' }}>
+                                                <IonSegmentButton value="out">
+                                                    <IonLabel>Uscita</IonLabel>
+                                                </IonSegmentButton>
+                                                <IonSegmentButton value="in">
+                                                    <IonLabel>Entrata</IonLabel>
+                                                </IonSegmentButton>
+                                            </IonSegment>
+
+                                            <IonInput fill="outline" className='ion-no-padding' label="Titolo" labelPlacement="floating" onIonInput={(e) => setTitle(e.detail.value!)} placeholder="Es. Spesa, Stipendio..." />
+                                            <IonInput fill="outline" className='ion-no-padding' label="Valore" labelPlacement="floating" onIonInput={(e) => setValue(e.detail.value!)} placeholder="0.00" type='number' />
+                                            
+                                            <div className="container-input" style={{ margin: '15px 0' }}>
                                                 <IonSelect placeholder="Seleziona categoria"
-                                                    onIonChange={(e) => pushType(e.target.value)}
-                                                    className="ion-padding">
-                                                    {types?.map((type) =>
-                                                        <IonSelectOption key={type._id} value={type._id}>
-                                                            {type.name}
-                                                        </IonSelectOption>
-                                                    )}
-                                                </IonSelect>
-                                                <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`} className='ion-padding'>
-                                                    {cat?.map((category) =>
-                                                        <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
+                                                    onIonChange={(e) => setCategory(e.detail.value)}
+                                                    className='ion-padding' fill="outline" disabled={!cat || cat.length === 0}>
+                                                    {cat?.map((c) =>
+                                                        <IonSelectOption key={c.id || c._id} value={c.id || c._id}>{c.name}</IonSelectOption>
                                                     )}
                                                 </IonSelect>
                                             </div>
-                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' className='custom-datatime' max={`${getCurrentDate()}`} />
-                                            <IonButton onClick={(e) => submitTransaction(false)} disabled={date === "" || category === null || type === null || title === "" || value === 0}>Crea transazione</IonButton>
-                                        </IonList>
-                                    </IonCol>
-                                </IonRow>
-                            </IonGrid>
-                        </Layout>
-                    </IonContent>
-                </IonModal>
-                <IonModal isOpen={isOpenOut}>
-                    <IonHeader>
-                        <IonToolbar>
-                            <IonTitle>Uscita</IonTitle>
-                            <IonButtons slot="end">
-                                <IonButton onClick={() => setIsOpenOut(false)}><IonIcon icon={closeOutline} /></IonButton>
-                            </IonButtons>
-                        </IonToolbar>
-                    </IonHeader>
-                    <IonContent>
-                        <Layout>
-                            <IonGrid>
-                                <IonRow>
-                                    <IonCol size='12'>
-                                        <IonList>
-                                            <IonItem fill="outline" className='ion-no-padding'>
-                                                <IonLabel position="floating">Titolo</IonLabel>
-                                                <IonInput onIonInput={(e) => pushTitle(e.target.value)} placeholder="Inserisci titolo quì..."></IonInput>
-                                            </IonItem>
-                                            <IonItem fill="outline" className='ion-no-padding'>
-                                                <IonLabel position="floating">Valore</IonLabel>
-                                                <IonInput onIonInput={(e) => pushValue(e.target.value)} placeholder="Inserisci valore quì..." type='number'></IonInput>
-                                            </IonItem>
-                                            <div className="container-select">
-                                                <IonSelect placeholder="Seleziona categoria"
-                                                    onIonChange={(e) => pushType(e.detail.value)}
-                                                    className="ion-padding">
-                                                    {types?.map((type) =>
-                                                        <IonSelectOption key={type._id} value={type._id}>
-                                                            {type.name}
-                                                        </IonSelectOption>
-                                                    )}
-                                                </IonSelect>
-                                                <IonSelect onIonChange={(e) => pushCat(e.detail.value)} placeholder={`Sottocategoria`} className='ion-padding'>
-                                                    {cat?.map((category) =>
-                                                        <IonSelectOption key={category._id} value={category._id}>{category.name}</IonSelectOption>
-                                                    )}
-                                                </IonSelect>
-                                            </div>
-                                            <IonDatetime onIonChange={(e) => storeDate(e.detail.value)} locale='it-IT' className='custom-datatime' max={`${getCurrentDate()}`} />
-                                            <IonButton onClick={(e) => submitTransaction(true)} disabled={date === "" || category === null || type === null || title === "" || value === 0}>Crea transazione</IonButton>
+
+                                            <IonDatetime onIonChange={(e) => setDate(e.detail.value as string)} locale='it-IT' className='custom-datatime' max={`${getCurrentDate()}`} />
+                                            
+                                            <IonButton expand="block" style={{ marginTop: '20px' }} onClick={submitTransaction} disabled={!date || !category || !type || !title || !value}>
+                                                Crea transazione
+                                            </IonButton>
                                         </IonList>
                                     </IonCol>
                                 </IonRow>
@@ -426,4 +344,4 @@ const Dashboard: React.FC = () => {
     );
 }
 
-export default Dashboard; 
+export default Dashboard;

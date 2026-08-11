@@ -1,3 +1,3 @@
 module.exports = {
-    db: 'mongodb+srv://stani:Super-Duper10@finantial.kwvbvjj.mongodb.net/'
-};  
+    db: process.env.MONGO_URI || 'mongodb://localhost:27017/financial-dashboard'
+};

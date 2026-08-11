@@ -26,8 +26,7 @@ import './theme/variables.css';
 import './theme/typography.css';
 
 /* Import swiper */
-import 'swiper/swiper.min.css';
-import '@ionic/react/css/ionic-swiper.css';
+import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-cards';
 import 'swiper/css/effect-flip';

@@ -1,15 +1,14 @@
-import './Charts.css'
+import './Charts.css';
 import DoughnutChart from "./doughnutChart/DoughnutChart";
 import LineChart from "./lineChart/LineChart";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, EffectFlip } from 'swiper';
 
-type chartsProps = {
+type ChartsProps = {
     data: any;
 }
 
-const Charts = ({ data }: chartsProps) => {
-    console.log(data)
+const Charts = ({ data }: ChartsProps) => {
     return (
         <Swiper
         spaceBetween={25}
@@ -20,16 +19,25 @@ const Charts = ({ data }: chartsProps) => {
         >
             <SwiperSlide>
                 <div className="chart">
-                    <DoughnutChart label={data.resultLabel} cash={data.resultCash} title="Uscite" total={data.total} />
+                    <DoughnutChart 
+                        label={data.resultLabel} 
+                        cash={data.resultCash} 
+                        title="Uscite per Categoria" 
+                        total={data.total} 
+                    />
                 </div>
             </SwiperSlide>
             <SwiperSlide>
                 <div className="chart">
-                    <LineChart title="Entrate" />
+                    <LineChart 
+                        title="Andamento Entrate" 
+                        labels={data?.incomeTrend?.labels || []} 
+                        data={data?.incomeTrend?.data || []} 
+                    />
                 </div>
             </SwiperSlide>
         </Swiper>
-    )
+    );
 }
 
 export default Charts;

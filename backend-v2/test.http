@@ -1,0 +1,82 @@
+### Variabili
+@baseUrl = http://localhost:8080
+# Sostituisci questo valore con il token reale che otterrai dal login!
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhN2I5ZjExMDY2NTMyNGQwYmM2YzYwOCIsImlhdCI6MTc4NjQ4NjYwMSwiZXhwIjoxNzg2NTczMDAxfQ.fc7nWRWbFqjfEmqCeUuJs9H8lsPVCFP66OW1e0e-t4A
+
+### ==========================================
+### AREA UTENTI
+### ==========================================
+
+### 1. Registrazione Nuovo Utente
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "email": "admin@dashboard.local",
+    "password": "PasswordSicura123!"
+}
+
+### 2. Login (Dovrebbe restituirti il JWT)
+POST {{baseUrl}}/users/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "PasswordSicura123!"
+}
+
+### 3. Ottieni Profilo (Usa il token protetto)
+GET {{baseUrl}}/users/profile
+Authorization: {{token}}
+
+### ==========================================
+### AREA TRANSAZIONI
+### ==========================================
+
+### 1. Crea una nuova transazione (USCITA)
+POST {{baseUrl}}/transaction/create
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "description": "Rata Daytona 660",
+    "cash": -150.00,
+    "date": "2026-08-12T10:00:00.000Z"
+}
+
+### 2. Crea una nuova transazione (ENTRATA)
+POST {{baseUrl}}/transaction/create
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "description": "Vendita vecchio monitor",
+    "cash": 120.50,
+    "date": "2026-08-11T15:30:00.000Z"
+}
+
+### 3. Ottieni TUTTE le transazioni
+GET {{baseUrl}}/transaction/show
+Authorization: {{token}}
+
+### 4. Filtra SOLO transazioni POSITIVE (Entrate)
+GET {{baseUrl}}/transaction/show-positive
+Authorization: {{token}}
+
+### 5. Filtra SOLO transazioni NEGATIVE (Uscite)
+GET {{baseUrl}}/transaction/show-negative
+Authorization: {{token}}
+
+### ==========================================
+### AREA CATEGORIE E TIPI
+### ==========================================
+
+### 1. Ottieni tutti i Tipi (Entrata, Uscita, ecc.)
+GET {{baseUrl}}/categories/types
+Authorization: {{token}}
+
+### 2. Ottieni le Categorie di un Tipo specifico 
+### (ATTENZIONE: Sostituisci l'ID qui sotto con uno di quelli restituiti dalla chiamata precedente)
+GET {{baseUrl}}/categories/INCOLLA_QUI_ID_DEL_TIPO
+Authorization: {{token}}

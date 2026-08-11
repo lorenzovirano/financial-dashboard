@@ -7,21 +7,27 @@ const Transaction = require("../models/transaction.model");
 const Type = require("../models/type.model");
 const { Types } = require("mongoose");
 
-async function login({username, password}, callback){
-    const user = await User.findOne({ username });
-    if(user != null){
-        if(bcrypt.compareSync(password, user.password)){
-            const token = auth.generateAccessToken(user.id);
-            return callback(null, {user, token});
-        }else{
-            return callback({
-                message: "Invalid Username/Password"
-            })
+async function login({ username, password }, callback) {
+    try {
+        const user = await User.findOne({
+            $or: [
+                { username: username },
+                { email: username }
+            ]
+        });
+
+        if (user != null) {
+            if (bcrypt.compareSync(password, user.password)) {
+                const token = auth.generateAccessToken(user.id);
+                return callback(null, { user, token });
+            } else {
+                return callback({ message: "Credenziali non valide" });
+            }
+        } else {
+            return callback({ message: "Credenziali non valide" });
         }
-    }else{
-        return callback({
-            message: "Invalid Username/Password"
-        })
+    } catch (err) {
+        return callback(err);
     }
 }
 

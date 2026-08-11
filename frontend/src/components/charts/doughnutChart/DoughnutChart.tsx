@@ -1,17 +1,17 @@
 import { CategoryScale } from "chart.js";
 import { Chart as ChartJS } from "chart.js/auto";
-import { useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react'
+import { useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
 import { Doughnut } from 'react-chartjs-2';
-import "./DoughnutChart.css"
+import "./DoughnutChart.css";
 
-type DoughnutChartPros = {
+type DoughnutChartProps = {
   title: string,
   total: number,
-  label: [],
-  cash: []
+  label: string[],
+  cash: number[]
 }
 
-const DoughnutChart = ({ title, total, label, cash }: DoughnutChartPros) => {
+const DoughnutChart = ({ title, total, label, cash }: DoughnutChartProps) => {
   useIonViewWillEnter(() => {
     ChartJS.register(CategoryScale);
   }, []);
@@ -21,7 +21,7 @@ const DoughnutChart = ({ title, total, label, cash }: DoughnutChartPros) => {
   }, []);
 
   const data = {
-    labels: label,
+    labels: label || [],
     datasets: [
       {
         label: "Importo in uscita",
@@ -30,18 +30,18 @@ const DoughnutChart = ({ title, total, label, cash }: DoughnutChartPros) => {
         borderWidth: 2,
         hoverBackgroundColor: "#06bbc181",
         hoverBorderColor: "#06BCC1",
-        data: cash,
+        data: cash || [],
       },
     ],
   };
-  //Set Data for Bar Chart. In Realtime you may bing this using the data coming from API or service. 
+
   return (
     <div className="exit-chart">
       <span className="chart-title">{title}</span>
       <Doughnut data={data} />
       <span className="chart-total">{total}</span>
     </div>
-  )
+  );
 }
 
-export default DoughnutChart;  
+export default DoughnutChart;

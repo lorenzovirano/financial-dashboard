@@ -82,7 +82,7 @@ http://ionicframework.com/docs/theming/ */
    * -------------------------------------------
    */
 
-  body {
+  :root {
     --ion-color-primary: #06BCC1;
     --ion-color-primary-rgb: 6, 188, 193;
     --ion-color-primary-contrast: #ffffff;
@@ -152,7 +152,7 @@ http://ionicframework.com/docs/theming/ */
    * -------------------------------------------
    */
 
-  .ios body {
+  .ios :root {
     --ion-background-color: #11263A;
 	--ion-background-color-rgb: 17,38,58;
 
@@ -192,7 +192,7 @@ http://ionicframework.com/docs/theming/ */
    * -------------------------------------------
    */
 
-  .md body {
+  .md :root {
     --ion-background-color: #11263A;
     --ion-background-color-rgb: 17,38,58;
   

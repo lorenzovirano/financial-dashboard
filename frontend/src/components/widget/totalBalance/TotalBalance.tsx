@@ -6,10 +6,15 @@ type TotalBalanceProps = {
 }
 
 const TotalBalance = ({ total, currency }: TotalBalanceProps) => {
+    const numericTotal = parseFloat(total || "0");
+    const isNegative = numericTotal < 0;
+
     return (
         <div className="total-balance">
             <h3 className="widget-title">Total Balance</h3>
-            <span>{currency}{total}</span>
+            <span style={{ color: isNegative ? '#ff4961' : 'inherit' }}>
+                {currency}{total}
+            </span>
         </div>
     );
 }

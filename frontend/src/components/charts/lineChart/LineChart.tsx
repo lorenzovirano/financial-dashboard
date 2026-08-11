@@ -1,42 +1,52 @@
-import { CategoryScale } from "chart.js";
+import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
 import { Chart as ChartJS } from "chart.js/auto";
-import {useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react'
+import { useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
 import { Line } from 'react-chartjs-2';
-import "./LineChart.css"
+import "./LineChart.css";
 
-type LineChartPros = {
+type LineChartProps = {
   title: string,
+  labels: string[],
+  data: number[]
 }
 
-const DoughnutChart = ({title}: LineChartPros) =>{
+const LineChart = ({ title, labels, data }: LineChartProps) => {
     useIonViewWillEnter(() => {
-        ChartJS.register(CategoryScale);
-      }, []);
+        ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
+    }, []);
     
     useIonViewWillLeave(() => {
-        ChartJS.unregister(CategoryScale);
+        ChartJS.unregister(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
     }, []);
 
-    const data = {
-        labels: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno"],
+    const chartData = {
+        labels: labels,
         datasets: [{
-          label: 'Bilancio',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          label: 'Entrate',
+          data: data,
           fill: true,
           backgroundColor: 'rgba(6, 187, 193, 0.51)',
           borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
+          tension: 0.3
         }]
-      };
-    //Set Data for Bar Chart. In Realtime you may bing this using the data coming from API or service. 
+    };
+
+    // Opzioni per adattare la scala dei numeri reali
+    const options = {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+
     return(
         <div className="exit-chart">
             <span className="chart-title">{title}</span>
-            <Line data={data} 
-            height={320}
-            width={320}/>
+            <Line data={chartData} options={options} height={320} width={320} />
         </div>
-    )
+    );
 }
 
-export default DoughnutChart;  
+export default LineChart;
