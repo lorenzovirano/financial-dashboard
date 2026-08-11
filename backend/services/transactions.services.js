@@ -128,10 +128,54 @@ async function show (req, callback){
         return callback(error)
     }
 }
+
+async function showPositive (req, callback){
+    const authHeader = req.headers.authorization;
+    const token = authHeader;
+    jwt.verify(token, "ProvaKey", (err, user) => {
+        if(err) return res.sendStatus(403);
+        req.user = user.data;
+    });
+    let id = req.user
+    let transaction = await Transaction.find({ "cash": {$gt: 0}, user: id }).sort({ created_at: "desc"})
+    if(transaction != null){
+        transaction = JSON.stringify(transaction)
+        transaction = JSON.parse(transaction)
+        transaction.forEach(trans => {
+            trans.date = new Date(trans.date).toLocaleString()
+        });
+        return callback(null, transaction)
+    }else{
+        return callback(error)
+    }
+}
+
+async function showNegative (req, callback){
+    const authHeader = req.headers.authorization;
+    const token = authHeader;
+    jwt.verify(token, "ProvaKey", (err, user) => {
+        if(err) return res.sendStatus(403);
+        req.user = user.data;
+    });
+    let id = req.user
+    let transaction = await Transaction.find({ "cash": {$lt: 0}, user: id}).sort({ created_at: "desc"})
+    if(transaction != null){
+        transaction = JSON.stringify(transaction)
+        transaction = JSON.parse(transaction)
+        transaction.forEach(trans => {
+            trans.date = new Date(trans.date).toLocaleString()
+        });
+        return callback(null, transaction)
+    }else{
+        return callback(error)
+    }
+}
 module.exports = {
     importCSV,
     create,
     show,
+    showPositive,
+    showNegative,
     update,
     getCategories,
     getTypes

@@ -59,3 +59,27 @@ exports.showTransactions = (req, res, next) => {
         })
     })
 }
+
+exports.showTransactionsPositive = (req, res, next) => {
+    transactionService.showPositive(req, (error, result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Succes",
+            data: result
+        })
+    })
+}
+
+exports.showTransactionsNegative = (req, res, next) => {
+    transactionService.showNegative(req, (error, result) => {
+        if(error){
+            return next(error)
+        }
+        return res.status(200).send({
+            message: "Succes",
+            data: result
+        })
+    })
+}

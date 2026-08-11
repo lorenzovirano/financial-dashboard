@@ -8,13 +8,8 @@ import CreditCards from '../../components/widget/creditCards/CreditCards';
 import TableItem from '../../components/widget/table/TableItem';
 import Charts from '../../components/charts/Charts';
 import { Key, useEffect, useState } from 'react';
-import { CategoryScale } from 'chart.js';
-
-
-
 
 const Dashboard: React.FC = () => {
-
     interface Type {
         name?: String,
         _id?: Key
@@ -31,19 +26,25 @@ const Dashboard: React.FC = () => {
         category: String,
         _id: number
     }
+    interface Bank {
+        bankName?: string,
+        user?: string
+        _id?: number
+    }
     const [username, setUsername] = useState("");
     const [wallet, setWallet] = useState("");
     const [types, setTypes] = useState<Type[]>();
     const [isOpenIn, setIsOpenIn] = useState(false);
     const [isOpenOut, setIsOpenOut] = useState(false);
     const [cat, setCat] = useState<Category[]>();
-    const [category, setCategory] = useState("")
-    const [type, setType] = useState("")
-    const [date, setDate] = useState("")
-    let [value, setValue] = useState<Number>()
-    const [title, setTitle] = useState("")
-    const [revenues, setRevenues] = useState("")
-    const [transactions, setTransaction] = useState<Transaction[]>()
+    const [category, setCategory] = useState("");
+    const [type, setType] = useState("");
+    const [date, setDate] = useState("");
+    let [value, setValue] = useState<Number>();
+    const [title, setTitle] = useState("");
+    const [revenues, setRevenues] = useState("");
+    const [transactions, setTransaction] = useState<Transaction[]>();
+    const [bank, setBank] = useState<Bank[]>();
     const submitTransaction = async (negative: boolean) => {
         let jwt = localStorage.getItem("jwt")
         if (jwt === "null" || jwt === undefined) {
@@ -121,6 +122,7 @@ const Dashboard: React.FC = () => {
 
         return currentJSON;
     }
+
     const navigation = useIonRouter();
     useEffect(() => {
         const checkHeaders = async () => {
@@ -133,12 +135,27 @@ const Dashboard: React.FC = () => {
             headers.append('Authorization', jwt || "no");
             getUser(headers)
             getTypes(headers)
-            getTransactions(headers)
+            getTransactions(headers, 'all')
+            getBank(headers)
+        }
+
+        const getBank = async (headers: any) => {
+            await fetch('http://localhost:4000/bank/get-bank', {
+                "method": 'GET',
+                "headers": headers,
+            })
+                .then((response) => {
+                    let bankRes = response.json()
+                        .then((res) => {
+                            setBank(res.data)
+                        })
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
         }
 
         const getUser = async (headers: any) => {
-
-
             await fetch('http://localhost:4000/users/user-profile', {
                 "method": 'GET',
                 "headers": headers,
@@ -148,7 +165,7 @@ const Dashboard: React.FC = () => {
                     let user = response.json()
                         .then((res) => {
                             setUsername(res.user.username)
-                            setWallet(res.wallet)
+                            setWallet(res.wallet) // formatta con prettier pls
                             setRevenues(res.revenues)
                             console.log(revenues)
                         })
@@ -156,8 +173,6 @@ const Dashboard: React.FC = () => {
                 .catch((err) => {
                     console.log(err.message);
                 });
-            //
-
         }
         const getTypes = async (headers: any) => {
             await fetch('http://localhost:4000/transaction/types', {
@@ -177,25 +192,60 @@ const Dashboard: React.FC = () => {
                 });
         }
 
-        const getTransactions = async (headers: any) => {
-            await fetch('http://localhost:4000/transaction/show?limit=4', {
-                "method": 'GET',
-                "headers": headers,
-            })
-                .then((response) => {
-                    console.log(response);
-                    response.json()
-                        .then((res) => {
-                            setTransaction(res.data)
-                            console.log(transactions)
-                        })
-                })
-                .catch((err) => {
-                    console.log(err.message);
-                });
-        }
+
         checkHeaders();
     }, [])
+
+    const getHeader = () => {
+        let jwt = localStorage.getItem("jwt")
+        let headers = new Headers();
+        headers.append('Content-type', 'application/json');
+        headers.append('Authorization', jwt || "no");
+        return headers;
+    }
+    async function getTransactions(headers: any, val: string){
+        let res: Response;
+        switch(val){
+            case 'all':
+                try {
+                    res = await fetch('http://localhost:4000/transaction/show?limit=4', {
+                    "method": 'GET',
+                    "headers": headers,
+                });
+                let json = await res.json();
+                setTransaction(json.data);
+                } catch (error: any) {
+                    console.error(error.message);
+                }
+            break;
+            case 'pos':
+                try {
+                    res = await fetch('http://localhost:4000/transaction/show-positive?limit=4', {
+                    "method": 'GET',
+                    "headers": headers,
+                });
+                let json = await res.json();
+                setTransaction(json.data);
+                } catch(error: any) {
+                    console.error(error.message);
+                }
+
+
+                    break;
+            case 'neg':
+                try {
+                    res = await fetch('http://localhost:4000/transaction/show-negative?limit=4', {
+                    "method": 'GET',
+                    "headers": headers,
+                });
+                let json = await res.json();
+                setTransaction(json.data);
+                } catch(error: any) {
+                    console.error(error.message);
+                }
+                    break;
+        }
+    }
 
     return (
         <IonPage>
@@ -212,7 +262,7 @@ const Dashboard: React.FC = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol size='12'>
-                                <CreditCards />
+                                    <CreditCards username={username} banks={bank} />
                                 <TotalBalance currency='$' total={wallet} />
                             </IonCol>
                         </IonRow>
@@ -225,10 +275,13 @@ const Dashboard: React.FC = () => {
                                 <IonCol size='12'>
                                     <IonList>
                                         <IonItem>
-                                            <IonSelect interface='popover' placeholder='Tutti i movimenti'>
-                                                <IonSelectOption value="Tutti i movimenti">Tutti i movimenti</IonSelectOption>
-                                                <IonSelectOption value="Entrate">Entrate</IonSelectOption>
-                                                <IonSelectOption value="Uscite">Uscite</IonSelectOption>
+                                            <IonSelect interface='popover' placeholder='Tutti i movimenti'
+                                            onIonChange={
+                                                (e) => getTransactions(getHeader(), e.detail.value)} // funzione che rompe
+                                            >
+                                                <IonSelectOption value="all">Tutti i movimenti</IonSelectOption> 
+                                                <IonSelectOption value="pos">Entrate</IonSelectOption>
+                                                <IonSelectOption value="neg">Uscite</IonSelectOption>
                                             </IonSelect>
                                         </IonItem>
                                     </IonList>
