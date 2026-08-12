@@ -1,7 +1,0 @@
-{
-  "name": "budget-buddy",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}
