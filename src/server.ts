@@ -10,6 +10,7 @@ import userRoutes from './modules/users/user.routes';
 import transactionRoutes from './modules/transactions/transaction.routes';
 import bankRoutes from './modules/banks/bank.routes';
 import categoryRoutes from './modules/categories/category.routes';
+import goalRoutes from './modules/goals/goal.routes';
 
 const startServer = async () => {
   const fastify = Fastify({
@@ -76,6 +77,7 @@ const startServer = async () => {
     await fastify.register(transactionRoutes, { prefix: '/transaction' });
     await fastify.register(bankRoutes, { prefix: '/bank' });
     await fastify.register(categoryRoutes, { prefix: '/categories' });
+    await fastify.register(goalRoutes, { prefix: '/goals' });
 
     // Rotta di test
     fastify.get('/ping', async () => {
