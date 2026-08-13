@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import '@fastify/jwt';
 import * as userController from './user.controller';
 
 export default async function userRoutes(fastify: FastifyInstance) {

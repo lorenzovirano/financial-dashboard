@@ -3,7 +3,7 @@ import * as userService from './user.service';
 
 export const register = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-        const body = request.body as any; // Sostituiremo con JSON Schema
+        const body = request.body as any;
         
         if (!body.username || !body.password || !body.email) {
             return reply.code(400).send({ message: "Username, email e password sono obbligatori" });
@@ -37,7 +37,6 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
 
 export const getProfile = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-        // request.user sarà popolato dal nostro Auth Hook
         const userId = (request as any).user.id;
         
         const dashboardData = await userService.getUserDashboard(userId);

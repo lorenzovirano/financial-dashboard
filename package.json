@@ -15,6 +15,7 @@
   "type": "commonjs",
   "dependencies": {
     "@fastify/cors": "^11.3.0",
+    "@fastify/jwt": "^10.2.1",
     "@fastify/multipart": "^10.1.0",
     "bcryptjs": "^3.0.3",
     "csvtojson": "^2.0.14",
