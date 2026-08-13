@@ -1,25 +1,24 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ITransaction extends Document {
-    type: mongoose.Types.ObjectId;
-    category: mongoose.Types.ObjectId;
-    description: string;
-    cash: number; // Tassativamente un numero!
-    date: Date;
-    user: mongoose.Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
+  user: mongoose.Types.ObjectId;
+  amount: number;
+  type: 'income' | 'expense';
+  category: mongoose.Types.ObjectId;
+  date: Date;
+  description?: string;
+  createdAt: Date;
 }
 
-const transactionSchema = new Schema<ITransaction>({
-    type: { type: Schema.Types.ObjectId, ref: 'Type' },
-    category: { type: Schema.Types.ObjectId, ref: 'Category' },
-    description: { type: String, required: true, trim: true },
-    cash: { type: Number, required: true },
-    date: { type: Date, required: true },
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+const TransactionSchema: Schema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  amount: { type: Number, required: true },
+  type: { type: String, enum: ['income', 'expense'], required: true },
+  category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+  date: { type: Date, default: Date.now, required: true },
+  description: { type: String, trim: true },
 }, {
-    timestamps: true
+  timestamps: true
 });
 
-export const Transaction = mongoose.model<ITransaction>('Transaction', transactionSchema);
+export const Transaction = mongoose.model<ITransaction>('Transaction', TransactionSchema);

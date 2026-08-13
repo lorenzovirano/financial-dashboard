@@ -8,7 +8,6 @@ export default async function transactionRoutes(fastify: FastifyInstance) {
     fastify.get('/show', transactionController.getAll);
     fastify.get('/show-positive', transactionController.getPositive);
     fastify.get('/show-negative', transactionController.getNegative);
-    
-    // Le rotte per /types e /categories andrebbero idealmente spostate in moduli dedicati (es. TypeModule),
-    // ma le omettiamo qui in attesa di ristrutturare quei modelli.
+
+    fastify.delete('/:id', transactionController.deleteTransaction);
 }

@@ -8,17 +8,15 @@ export const importTransactions = async (csvString: string, userId: string) => {
         throw new Error("Il file CSV è vuoto");
     }
 
-    // Mappiamo i dati per il DB, assicurandoci di castare il cash a Number
     const transactionsToInsert = parsedData.map(row => ({
         type: row.type,
         category: row.category || null,
         description: row.description,
-        cash: parseFloat(row.cash),
+        amount: parseFloat(row.amount),
         date: new Date(row.date),
         user: userId
     }));
 
-    // Batch insert: 1 singola query ottimizzata invece di N query in un ciclo
     const result = await Transaction.insertMany(transactionsToInsert);
     return result;
 };
@@ -26,7 +24,7 @@ export const importTransactions = async (csvString: string, userId: string) => {
 export const createTransaction = async (data: Partial<ITransaction>, userId: string) => {
     const newTransaction = new Transaction({
         ...data,
-        cash: Number(data.cash),
+        amount: Number(data.amount),
         user: userId
     });
     return await newTransaction.save();
@@ -35,11 +33,10 @@ export const createTransaction = async (data: Partial<ITransaction>, userId: str
 export const getTransactions = async (userId: string, limit?: number, type?: 'positive' | 'negative') => {
     const query: any = { user: userId };
     
-    // Ora che cash è un numero, le query $gt e $lt funzionano perfettamente
-    if (type === 'positive') query.cash = { $gt: 0 };
-    if (type === 'negative') query.cash = { $lt: 0 };
+    if (type === 'positive') query.amount = { $gt: 0 };
+    if (type === 'negative') query.amount = { $lt: 0 };
 
-    let dbQuery = Transaction.find(query).sort({ createdAt: 'desc' }).lean();
+    let dbQuery = Transaction.find(query).populate('category').sort({ createdAt: 'desc' }).lean();
     
     if (limit) {
         dbQuery = dbQuery.limit(limit);
@@ -47,9 +44,16 @@ export const getTransactions = async (userId: string, limit?: number, type?: 'po
 
     const transactions = await dbQuery;
 
-    // Formattiamo le date prima di inviarle al client
     return transactions.map(trans => ({
         ...trans,
-        date: trans.date.toLocaleString() // Modificabile in base alla localizzazione desiderata
+        date: trans.date.toLocaleString() 
     }));
+};
+
+export const deleteTransaction = async (transactionId: string, userId: string) => {
+    const deleted = await Transaction.findOneAndDelete({ _id: transactionId, user: userId });
+    if (!deleted) {
+        throw new Error("Transazione non trovata o non autorizzato");
+    }
+    return deleted;
 };

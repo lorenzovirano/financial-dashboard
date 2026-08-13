@@ -5,7 +5,6 @@ export const importCSV = async (request: FastifyRequest, reply: FastifyReply) =>
     try {
         const userId = (request as any).user.id;
         
-        // Fastify Multipart: estrae il file in modo asincrono
         const data = await request.file();
         if (!data) {
             return reply.code(400).send({ message: "File CSV mancante" });
@@ -61,5 +60,17 @@ export const getNegative = async (request: FastifyRequest, reply: FastifyReply) 
         return reply.code(200).send({ message: "Success", data: result });
     } catch (error: any) {
         throw error;
+    }
+};
+
+export const deleteTransaction = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+        const userId = (request as any).user.id;
+        const { id } = request.params as { id: string };
+        
+        await transactionService.deleteTransaction(id, userId);
+        return reply.code(200).send({ message: "Transazione eliminata con successo" });
+    } catch (error: any) {
+        return reply.code(400).send({ message: error.message });
     }
 };
