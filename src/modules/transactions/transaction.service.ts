@@ -55,18 +55,19 @@ export const getTransactions = async (userId: string, limit?: number, type?: 'po
     if (type === 'positive') query.amount = { $gt: 0 };
     if (type === 'negative') query.amount = { $lt: 0 };
 
-    let dbQuery = Transaction.find(query).populate('category').sort({ createdAt: 'desc' }).lean();
+    let dbQuery = Transaction.find(query)
+        .populate('category')
+        .populate('account', 'bankName accountType')
+        .populate('toAccount', 'bankName accountType')
+        .sort({ date: 'desc' })
+        .lean();
     
     if (limit) {
         dbQuery = dbQuery.limit(limit);
     }
 
     const transactions = await dbQuery;
-
-    return transactions.map(trans => ({
-        ...trans,
-        date: trans.date.toLocaleString() 
-    }));
+    return transactions;
 };
 
 export const getTransactionsByUser = async (userId: string) => {
