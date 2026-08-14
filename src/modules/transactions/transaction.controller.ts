@@ -22,9 +22,17 @@ export const importCSV = async (request: FastifyRequest, reply: FastifyReply) =>
 export const createTransaction = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
         const userId = (request as any).user.id;
-        const body = request.body as any;
+        const data = request.body as any;
         
-        const result = await transactionService.createTransaction(body, userId);
+        if (data.amount === undefined || !data.type || !data.account) {
+            return reply.code(400).send({ message: "Importo, tipologia e conto di origine sono obbligatori." });
+        }
+
+        if (data.type !== 'transfer' && !data.category) {
+            return reply.code(400).send({ message: "La categoria è obbligatoria per entrate e uscite." });
+        }
+
+        const result = await transactionService.createTransaction(data, userId);
         return reply.code(201).send({ message: "Success", data: result });
     } catch (error: any) {
         return reply.code(400).send({ message: error.message });

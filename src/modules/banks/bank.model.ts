@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IBank extends Document {
   bankName: string;
-  accountType: 'OPERATIVE' | 'INVESTMENT';
+  accountType: 'OPERATIVE' | 'INVESTMENT' | 'CASH';
   identifier?: string;
   user: mongoose.Types.ObjectId;
   createdAt: Date;
@@ -17,7 +17,7 @@ const bankSchema = new Schema<IBank>({
   },
   accountType: {
     type: String,
-    enum: ['OPERATIVE', 'INVESTMENT'],
+    enum: ['OPERATIVE', 'INVESTMENT', 'CASH'],
     default: 'OPERATIVE',
     required: true
   },

@@ -21,12 +21,31 @@ export const importTransactions = async (csvString: string, userId: string) => {
     return result;
 };
 
-export const createTransaction = async (data: Partial<ITransaction>, userId: string) => {
+export const createTransaction = async (data: any, userId: string) => {
+    let finalAmount = Number(data.amount);
+
+    if (data.type === 'expense' && finalAmount > 0) {
+        finalAmount = -finalAmount;
+    } 
+    else if ((data.type === 'income' || data.type === 'transfer') && finalAmount < 0) {
+        finalAmount = Math.abs(finalAmount);
+    }
+
+    if (data.type === 'transfer') {
+        if (!data.toAccount) {
+            throw new Error("Un trasferimento richiede un conto di destinazione.");
+        }
+        if (data.account === data.toAccount) {
+            throw new Error("Il conto di destinazione deve essere diverso da quello di origine.");
+        }
+    }
+
     const newTransaction = new Transaction({
         ...data,
-        amount: Number(data.amount),
+        amount: finalAmount,
         user: userId
     });
+
     return await newTransaction.save();
 };
 
@@ -48,6 +67,15 @@ export const getTransactions = async (userId: string, limit?: number, type?: 'po
         ...trans,
         date: trans.date.toLocaleString() 
     }));
+};
+
+export const getTransactionsByUser = async (userId: string) => {
+    return await Transaction.find({ user: userId })
+        .populate('category')
+        .populate('account', 'bankName accountType') 
+        .populate('toAccount', 'bankName accountType')
+        .sort({ date: 'desc' })
+        .lean();
 };
 
 export const deleteTransaction = async (transactionId: string, userId: string) => {
