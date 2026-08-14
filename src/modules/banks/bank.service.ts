@@ -1,16 +1,29 @@
-import { Bank, IBank } from './bank.model';
+import { Bank } from './bank.model';
 
-export const createBank = async (bankName: string, userId: string) => {
+export const createBank = async (data: { bankName: string, accountType: string, identifier?: string }, userId: string) => {
     const newBank = new Bank({
-        bankName,
+        ...data,
         user: userId
     });
-
-    const result = await newBank.save();
-    return result;
+    return await newBank.save();
 };
 
 export const getBanksByUser = async (userId: string) => {
-    const result = await Bank.find({ user: userId }).lean();
-    return result;
+    return await Bank.find({ user: userId }).sort({ createdAt: 'asc' }).lean();
+};
+
+export const updateBank = async (bankId: string, userId: string, data: { bankName: string, accountType: string, identifier?: string }) => {
+    const updated = await Bank.findOneAndUpdate(
+        { _id: bankId, user: userId },
+        { $set: data },
+        { new: true }
+    );
+    if (!updated) throw new Error("Conto non trovato o non autorizzato");
+    return updated;
+};
+
+export const deleteBank = async (bankId: string, userId: string) => {
+    const deleted = await Bank.findOneAndDelete({ _id: bankId, user: userId });
+    if (!deleted) throw new Error("Conto non trovato o non autorizzato");
+    return deleted;
 };
