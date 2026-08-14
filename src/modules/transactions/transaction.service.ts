@@ -23,20 +23,37 @@ export const importTransactions = async (csvString: string, userId: string) => {
 
 export const createTransaction = async (data: any, userId: string) => {
     let finalAmount = Number(data.amount);
-
     if (data.type === 'expense' && finalAmount > 0) {
         finalAmount = -finalAmount;
     } 
     else if ((data.type === 'income' || data.type === 'transfer') && finalAmount < 0) {
         finalAmount = Math.abs(finalAmount);
     }
-
     if (data.type === 'transfer') {
         if (!data.toAccount) {
             throw new Error("Un trasferimento richiede un conto di destinazione.");
         }
         if (data.account === data.toAccount) {
             throw new Error("Il conto di destinazione deve essere diverso da quello di origine.");
+        }
+
+        const accountTransactions = await Transaction.find({
+            user: userId,
+            $or: [{ account: data.account }, { toAccount: data.account }]
+        });
+        const currentBalance = accountTransactions.reduce((acc, tx) => {
+            const txAmount = Number(tx.amount);
+            
+            if (tx.type === 'income' && tx.account.toString() === data.account) return acc + txAmount;
+            if (tx.type === 'expense' && tx.account.toString() === data.account) return acc + txAmount; 
+            if (tx.type === 'transfer') {
+                if (tx.account.toString() === data.account) return acc - txAmount;
+                if (tx.toAccount?.toString() === data.account) return acc + txAmount;
+            }
+            return acc;
+        }, 0);
+        if (currentBalance < finalAmount) {
+            throw new Error(`Fondi insufficienti. Saldo disponibile: € ${currentBalance.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
         }
     }
 
