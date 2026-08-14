@@ -11,6 +11,7 @@ import transactionRoutes from './modules/transactions/transaction.routes';
 import bankRoutes from './modules/banks/bank.routes';
 import categoryRoutes from './modules/categories/category.routes';
 import goalRoutes from './modules/goals/goal.routes';
+import recurringRoutes from './modules/recurrings/recurring.routes';
 
 const startServer = async () => {
   const fastify = Fastify({
@@ -78,6 +79,7 @@ const startServer = async () => {
     await fastify.register(bankRoutes, { prefix: '/bank' });
     await fastify.register(categoryRoutes, { prefix: '/categories' });
     await fastify.register(goalRoutes, { prefix: '/goals' });
+    fastify.register(recurringRoutes, { prefix: '/recurring' });
 
     // Rotta di test
     fastify.get('/ping', async () => {
