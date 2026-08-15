@@ -54,7 +54,7 @@ export const getUserDashboard = async (userId: string) => {
         },
         {
             $lookup: {
-                from: "categories", // Nome della collezione nel DB (spesso plurale in Mongo)
+                from: "categories",
                 localField: "_id",
                 foreignField: "_id",
                 as: "categoryDetails"
@@ -67,7 +67,7 @@ export const getUserDashboard = async (userId: string) => {
     const total = resultCash.reduce((a, b) => a + b, 0);
 
     const transactions = await Transaction.find({ user: userId }).sort({ date: -1 }).limit(10).lean();
-    const totalWallet = transactions.reduce((acc, curr) => acc + (Number(curr.cash) || 0), 0);
+    const totalWallet = transactions.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
 
     const incomeStats = await Transaction.aggregate([
         { $match: { user: new mongoose.Types.ObjectId(userId), cash: { $gt: 0 } } },
