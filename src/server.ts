@@ -20,10 +20,12 @@ const startServer = async () => {
 
   try {
     await fastify.register(cors, {
-      origin: '*', 
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // <-- Aggiungi i metodi consentiti
-      allowedHeaders: ['Content-Type', 'Authorization'],    // <-- Buona norma per i token JWT
+      origin: ['https://budgetbuddy.lorenzovirano.com', 'http://localhost:5173'], 
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
     });
+
     // 3. Connessione a MongoDB
     const dbUri = process.env.DB_URI || 'mongodb://localhost:27017/financial-dashboard';
     await mongoose.connect(dbUri);
