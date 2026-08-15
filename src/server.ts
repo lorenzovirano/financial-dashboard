@@ -49,7 +49,7 @@ const startServer = async () => {
     });
 
     // 5. Error Handler Globale Unificato
-    fastify.setErrorHandler((error, request, reply) => {
+    fastify.setErrorHandler((error: any, request, reply) => {
         fastify.log.error(error);
 
         if (error.validation) {
