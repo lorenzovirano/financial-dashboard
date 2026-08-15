@@ -80,3 +80,7 @@ Authorization: {{token}}
 ### (ATTENZIONE: Sostituisci l'ID qui sotto con uno di quelli restituiti dalla chiamata precedente)
 GET {{baseUrl}}/categories/INCOLLA_QUI_ID_DEL_TIPO
 Authorization: {{token}}
+
+
+POST {{baseUrl}}/investments
+Authorization: {{token}}
