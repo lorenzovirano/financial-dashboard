@@ -1,21 +1,48 @@
-import { Transaction, ITransaction } from './transaction.model';
-import csv from 'csvtojson';
+import { Transaction } from './transaction.model';
+import { Category } from '../categories/category.model'; // Adegua il path se necessario
 
-export const importTransactions = async (csvString: string, userId: string) => {
-    const parsedData = await csv().fromString(csvString);
-    
-    if (parsedData.length === 0) {
-        throw new Error("Il file CSV è vuoto");
+export const bulkImportTransactions = async (transactions: any[], accountId: string, userId: string) => {
+    if (!transactions || transactions.length === 0) {
+        throw new Error("Nessuna transazione fornita per l'importazione.");
+    }
+    if (!accountId) {
+        throw new Error("Devi specificare un conto di destinazione (account).");
+    }
+    const uniqueCategoryNames = [...new Set(
+        transactions
+            .map(tx => tx.category)
+            .filter(cat => cat && typeof cat === 'string' && cat.trim() !== '')
+    )] as string[];
+
+    const categoryNameToIdMap = new Map<string, string>();
+
+    if (uniqueCategoryNames.length > 0) {
+        const existingCategories = await Category.find({
+            $or: [{ user: userId }, { user: { $exists: false } }, { user: null }], 
+            name: { $in: uniqueCategoryNames.map(name => new RegExp(`^${name.trim()}$`, 'i')) }
+        });
+        existingCategories.forEach(cat => {
+            categoryNameToIdMap.set(cat.name.toLowerCase(), cat._id.toString());
+        });
     }
 
-    const transactionsToInsert = parsedData.map(row => ({
-        type: row.type,
-        category: row.category || null,
-        description: row.description,
-        amount: parseFloat(row.amount),
-        date: new Date(row.date),
-        user: userId
-    }));
+    const transactionsToInsert = transactions.map(tx => {
+        let categoryId = null;
+        
+        if (tx.category && typeof tx.category === 'string' && tx.category.trim() !== '') {
+            categoryId = categoryNameToIdMap.get(tx.category.trim().toLowerCase()) || null;
+        }
+
+        return {
+            type: tx.type,
+            category: categoryId,
+            description: tx.description,
+            amount: Number(tx.amount),
+            date: new Date(tx.date),
+            account: accountId,
+            user: userId
+        };
+    });
 
     const result = await Transaction.insertMany(transactionsToInsert);
     return result;

@@ -3,7 +3,7 @@ import * as transactionController from './transaction.controller';
 
 export default async function transactionRoutes(fastify: FastifyInstance) {
     fastify.post('/create', transactionController.createTransaction);
-    fastify.post('/import', transactionController.importCSV);
+    fastify.post('/bulk', transactionController.bulkImport);
     
     fastify.get('/show', transactionController.getAll);
     fastify.get('/show-positive', transactionController.getPositive);

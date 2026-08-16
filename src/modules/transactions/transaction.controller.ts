@@ -1,17 +1,18 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import * as transactionService from './transaction.service';
 
-export const importCSV = async (request: FastifyRequest, reply: FastifyReply) => {
+export const bulkImport = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
         const userId = (request as any).user.id;
         
-        const data = await request.file();
-        if (!data) {
-            return reply.code(400).send({ message: "File CSV mancante" });
+        // Ora leggiamo dal body, non più dal file multipart
+        const { transactions, account } = request.body as { transactions: any[], account: string };
+
+        if (!transactions || !account) {
+            return reply.code(400).send({ message: "Transazioni e conto di origine sono obbligatori." });
         }
 
-        const buffer = await data.toBuffer();
-        const result = await transactionService.importTransactions(buffer.toString(), userId);
+        const result = await transactionService.bulkImportTransactions(transactions, account, userId);
         
         return reply.code(201).send({ message: "Success", data: result });
     } catch (error: any) {
